@@ -1,0 +1,35 @@
+{
+  "name": "pet-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "startdev": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "~1.17.1",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^1.3.2",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
+    "csurf": "^1.9.0",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.5",
+    "express-validator": "^4.2.0",
+    "jade": "~1.11.0",
+    "jsonwebtoken": "^8.0.1",
+    "mongoose": "^4.11.12",
+    "morgan": "~1.8.1",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-rc.4",
+    "serve-favicon": "~2.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}

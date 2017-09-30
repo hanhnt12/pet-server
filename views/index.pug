@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  if products.length > 0
+    each product in products
+      //- if val % 3 === 0
+      //-   div.row
+      include includes/thumbnails.pug
+  else
+    div(class='jumbotron text-center') No pet found

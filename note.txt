@@ -1,0 +1,6 @@
+# start mongodb on localhost
+1. Run command line
+2. cd C:\Program Files\MongoDB\Server\3.4\bin
+3. mongod --dbpath=C:/data/pet
+
+

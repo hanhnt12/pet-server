@@ -1,0 +1,55 @@
+extends ../layout
+
+block content
+
+  <div class="container">
+    <table id="cart" class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th style="width:50%">Sản phẩm</th>
+          <th style="width:10%">Giá</th>
+          <th style="width:8%">Số lượng</th>
+          <th style="width:22%" class="text-center">Thành tiền</th>
+          <th style="width:10%"></th>
+        </tr>
+      </thead>
+      if cart
+        <tbody>
+          each product in cart.items
+            <tr>
+              <td data-th="Product">
+                <div class="row">
+                  <div class="col-sm-2 hidden-xs"><img src="#{product.item.imagePath}" alt="..." class="img-responsive"/></div>
+                  <div class="col-sm-10">
+                    <h4 class="nomargin">#{product.item.title}</h4>
+                    <p>#{product.item.description}</p>
+                  </div>
+                </div>
+              </td>
+              <td data-th="Price" class="price">$#{product.item.price}</td>
+              <td data-th="Quantity">
+                <input type="number" class="form-control text-center" value="#{product.qty}">
+              </td>
+              <td data-th="Subtotal" class="text-center price">#{product.price}</td>
+              <td class="actions" data-th="">
+                <a href="/cart/add/#{product.item._id}" class="btn btn-info btn-sm"><i class="fa fa-plus"></i></a>
+                <a href="/cart/reduce/#{product.item._id}" class="btn btn-warning btn-sm"><i class="fa fa-minus"></i></i></a>
+                <a href="/cart/remove/#{product.item._id}" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></a>								
+              </td>
+            </tr>
+        </tbody>
+        <tfoot>
+          <tr class="visible-xs">
+            <td class="text-center"><strong class="price">Tổng cộng $#{cart.totalQuanlity}</strong></td>
+          </tr>
+          <tr>
+            <td><a href="/" class="btn btn-warning"><i class="fa fa-angle-left"></i> Tiếp tục xem</a></td>
+            <td colspan="2" class="hidden-xs"></td>
+            <td class="hidden-xs text-center"><strong>Tổng cộng</strong><strong class="price"> $#{cart.totalPrice}</strong></td>
+            <td><a href="#" class="btn btn-success btn-block">Đặt hàng <i class="fa fa-angle-right"></i></a></td>
+          </tr>
+        </tfoot>
+      else
+        div(class='jumbotron text-center') No pet found
+    </table>
+  </div>

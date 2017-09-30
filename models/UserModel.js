@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
+var config = require('../config/config');
 
 // define schema for use model
 var UserSchema = mongoose.Schema({
@@ -7,9 +8,10 @@ var UserSchema = mongoose.Schema({
   password: { type: String, require: true },
   role: {
     type: String,
-    enum: ['client', 'manager', 'admin'],
-    default: 'client'
-  }
+    enum: config.userRoles,
+    default: config.defaultUserRole
+  },
+  createDate: {type: Date, default: Date.now}
 });
 
 // generate hash

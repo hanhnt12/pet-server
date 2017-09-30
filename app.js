@@ -21,6 +21,7 @@ mongoose.connect(config.url);
 
 // secret variable
 app.locals.superSecret = config.secret; 
+
 require('./config/passport');
 //==================== configuration============================
 
@@ -44,7 +45,7 @@ app.use(passport.session());
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // use morgan to log requests to the console
-app.use(logger('combined'));
+app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -58,6 +59,14 @@ app.use(function (req, res, next) {
   res.locals.login = req.isAuthenticated();
   // setting global session
   res.locals.session = req.session;
+  next();
+});
+
+// setting cors
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
 
@@ -84,14 +93,6 @@ app.use('/api/categories', categoriesAPI);
 // =======================
 // end routes ============
 // =======================
-
-// setting cors
-app.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
 
 // log error
 app.use(logErrors);

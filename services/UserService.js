@@ -66,18 +66,6 @@ exports.register = async function (req, res) {
     let password = req.body.password;
     let role = req.body.role;
 
-    // check username exist
-    const user = await UserModel.findOne({ username: username });
-    console.log(user);
-
-    // if exist username
-    if (user) {
-      res.json({
-        success: false,
-        message: 'Username đã tồn tại'
-      });
-    }
-
     // create the user
     var newUser = new UserModel();
 
@@ -96,8 +84,29 @@ exports.register = async function (req, res) {
       message: ''
     });
 
-  // Handler error
+    // Handler error
   } catch (err) {
+    console.log(err);
+    res.json(config.commonError);
+  }
+}
+
+// check user exist in database
+exports.isExistUser = async function (req) {
+  try {
+    // get request paramter
+    let username = req.body.username;
+
+    // check username exist
+    const user = await UserModel.findOne({ username: username });
+
+    // if exist username
+    if (user) {
+      return true;
+    }
+    return false;
+
+  } catch (error) {
     console.log(err);
     res.json(config.commonError);
   }

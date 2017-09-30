@@ -1,4 +1,5 @@
 const config = require('../config/config');
+const UserService = require('../services/UserService');
 
 // authenticate user
 exports.authenticate = async function (req, res, next) {
@@ -52,6 +53,12 @@ exports.register = function (req, res, next) {
     error = true;
     item = 'role';
     message = 'Role không tồn tại.';
+  }
+
+  // check exist user
+  if (UserService.isExistUser(username)) {
+    error = true;
+    message: 'Username đã tồn tại.'
   }
 
   // if have not any error

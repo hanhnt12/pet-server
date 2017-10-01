@@ -7,7 +7,7 @@ exports.authenticate = async function (req, res, next) {
 }
 
 // validate when submit register
-exports.register = function (req, res, next) {
+exports.validateRegister = function (req, res, next) {
   let username = req.body.username;
   let password = req.body.password;
   let role = req.body.role;

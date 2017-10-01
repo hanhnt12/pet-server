@@ -1,6 +1,15 @@
 let UserModel = require('../models/UserModel');
 let passport = require('passport');
 const config = require('../config/config');
+var jwt = require('jsonwebtoken');
+
+function generateToken(user) {
+  let token = jwt.sign({ user: user }, config.token.secret, {
+    expiresIn: config.token.expiresIn
+  });
+  console.log(token);
+  return token;
+}
 
 // authenticate user
 exports.authenticate = async function (req, res, next) {
@@ -18,45 +27,32 @@ exports.authenticate = async function (req, res, next) {
 
   console.log(query);
 
-  // find user
-  User.findOne(query, projection, function (err, user) {
-    // handle error
-    if (err) {
-      next(err);
-    }
+  try {
+    // find user
+    let user = await UserModel.findOne(query, projection);
+    console.log(user);
 
-    // if user is not exist then response
-    if (!user) {
+    // check user exist and password is correct
+    if (!user || !user.isValidPassword(password)) {
       res.json({
         success: false,
-        message: 'Authentication failed. User not exist.'
+        message: 'Authentication failed. Username hoặc password không đúng.'
       });
     } else {
-      // create token
-      console.log('get token');
-      console.log(user);
 
-      // check match password
-      if (!user.isValidPassword(req.body.password)) {
-        res.json({
-          success: false,
-          message: 'Authentication failed. password not correct.'
-        });
-      } else {
-        let token = jwt.sign({ user: user }, config.secret, {
-          expiresIn: 60 * 60 * 3 // expires in 3 hours
-        });
-        console.log(token);
+      // generate token
+      let token = generateToken(user);
 
-        // return json data
-        res.json({
-          success: true,
-          message: '',
-          token: token
-        });
-      }
+      // return json data
+      res.json({
+        success: true,
+        token: token
+      });
     }
-  });
+  } catch (error) {
+    console.log(err);
+    res.json(config.commonError);
+  }
 }
 
 exports.register = async function (req, res) {
@@ -79,9 +75,13 @@ exports.register = async function (req, res) {
     // save the user
     await newUser.save();
 
+    // generate token
+    let token = generateToken(user);
+
+    // return json data
     res.json({
       success: true,
-      message: ''
+      token: token
     });
 
     // Handler error

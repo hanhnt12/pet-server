@@ -33,8 +33,10 @@ var jwt = require('jsonwebtoken');
 // });
 
 /* route to authenticate */
-// router.post('/authenticate', );
-router.post('/register', UserController.register, UserService.register);
+router.post('/authenticate', UserService.authenticate);
+
+/* route to register */
+router.post('/register', UserController.validateRegister, UserService.register);
 
 
 

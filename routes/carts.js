@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-let Product = require('../models/product');
+let Product = require('../models/ProductModel');
 let Cart = require('../models/cart');
 
 /* GET home page. */

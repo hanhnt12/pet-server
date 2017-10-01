@@ -1,10 +1,9 @@
 let Product = require('../models/product');
 let Category = require('../models/category');
 let mongoose = require('mongoose');
-const dbUrl = require('../config/db').url
+const dbUrl = require('../config/config').url
 
 mongoose.connect(dbUrl);
-
 
 var categories = [];
 

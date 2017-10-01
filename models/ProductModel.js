@@ -13,6 +13,7 @@ let schema = new Schema({
   views: {type: Number, default: 0},
   starts: {type: Number, default: 1},
   amount: {type: Number, default: 1},
+  createDate: {type: Date, default: Date.now},
 });
 
 schema

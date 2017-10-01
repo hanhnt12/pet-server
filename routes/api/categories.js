@@ -1,13 +1,8 @@
 var express = require('express');
 var router = express.Router();
-let Category = require('../../models/category');
+let CategoryService = require('../../services/CategoryService');
 
 /* get list categories */
-router.get('/', function (req, res, next) {
-  // use model to query db
-  Category.find({}, (err, docs) => {
-    res.json(docs);
-  });
-});
+router.get('/', CategoryService.getCategories);
 
 module.exports = router;

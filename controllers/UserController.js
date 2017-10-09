@@ -2,8 +2,37 @@ const config = require('../config/config');
 const UserService = require('../services/UserService');
 
 // authenticate user
-exports.authenticate = async function (req, res, next) {
+exports.authenticateValidate = async function (req, res, next) {
+  let username = req.body.username;
+  let password = req.body.password;
+  let role = req.body.role;
 
+  let error = false;
+  let item = '';
+  let message = '';
+
+  if (!username) {
+    error = true;
+    item = 'username';
+    message = 'Vui lòng nhập username.';
+  }
+
+  if (!error && !password) {
+    error = true;
+    item = 'password';
+    message = 'Vui lòng nhập password.';
+  }
+
+  // if have not any error
+  if (error) {
+    res.json({
+      success: false,
+      item: item,
+      message: message
+    });
+  } else {
+    next();
+  }
 }
 
 // validate when submit register

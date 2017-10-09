@@ -32,12 +32,19 @@ var jwt = require('jsonwebtoken');
 //   }
 // });
 
-/* route to authenticate */
-router.post('/authenticate', UserService.authenticate);
+/**
+ *  route to authenticate
+ */
+router.post('/authenticate', UserController.authenticateValidate, UserService.authenticate);
 
-/* route to register */
+/**
+ * route to register
+ */ 
 router.post('/register', UserController.validateRegister, UserService.register);
 
-
+/**
+ * get master user roles
+ */
+router.get('/roles', UserService.getUserRoles);
 
 module.exports = router;

@@ -20,7 +20,7 @@ var app = express();
 mongoose.connect(config.url);
 
 // secret variable
-app.locals.superSecret = config.secret; 
+app.locals.superSecret = config.token.secret;
 
 require('./config/passport');
 //==================== configuration============================
@@ -31,11 +31,14 @@ app.set('view engine', 'pug');
 
 //==================== require for passport============================
 app.use(session({
-  secret: 'hanhnt',
+  secret: config.token.secret,
+  name: config.token.name, // sessionID
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({ mongooseConnection: mongoose.connection }), // session store in mongodb
-  cookie: { maxAge: 3 * 60 * 60 * 1000 } // 3 hour
+  cookie: { 
+    maxAge: config.token.expiresIn
+  } // 3 hour
 }));
 app.use(flash());
 app.use(passport.initialize());

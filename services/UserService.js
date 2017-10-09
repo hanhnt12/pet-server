@@ -46,7 +46,11 @@ exports.authenticate = async function (req, res, next) {
       // return json data
       res.json({
         success: true,
-        token: token
+        token: token,
+        user: {
+          username: user.username,
+          role: user.role
+        }
       });
     }
   } catch (error) {
@@ -106,6 +110,21 @@ exports.isExistUser = async function (req) {
     }
     return false;
 
+  } catch (error) {
+    console.log(err);
+    res.json(config.commonError);
+  }
+}
+
+/**
+ * Get master role for use
+ */
+exports.getUserRoles = async function (req, res, next) {
+  try {
+    res.json({
+      success: true,
+      roles: config.userRoles
+    });
   } catch (error) {
     console.log(err);
     res.json(config.commonError);

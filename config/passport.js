@@ -1,6 +1,10 @@
 var passport = require('passport');
 var User = require('../models/UserModel');
 var LocalStrategy = require('passport-local').Strategy;
+// var passportJWT = require("passport-jwt");
+// var ExtractJwt = passportJWT.ExtractJwt;
+// var Strategy = passportJWT.Strategy;
+// var config = require('./config');
 
 // =========================================================================
 // passport session setup ==================================================
@@ -98,3 +102,24 @@ passport.use('local.login', new LocalStrategy({
   // });
 
 }));
+
+/**
+ * passport strategy for api
+ */
+// var params = {
+//   secretOrKey: config.token.secret,
+//   jwtFromRequest: ExtractJwt.fromAuthHeader()
+// };
+
+// var strategy = new Strategy(params, function (payload, done) {
+//   var user = User[payload.id] || null;
+//   if (user) {
+//     return done(null, {
+//       id: user.id
+//     });
+//   } else {
+//     return done(new Error("User not found"), null);
+//   }
+// });
+
+// passport.use('api.login', strategy);

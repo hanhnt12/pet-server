@@ -10,8 +10,16 @@ router.use(csrfProtection);
 //   next();
 // });
 
+/* process logout */
+router.get('/logout', isLoggedIn, function(req, res) {
+  console.log('logged out.');
+  req.logout();
+  
+  res.redirect('/');
+});
+
 /* show the login form */
-router.get('/login', isNotLoggedIn, function(req, res) {
+router.get('/login', function(req, res) {
   // binding error
   var message = req.flash('error');
   // console.log(message);
@@ -39,7 +47,7 @@ router.post('/login', (req, res, next) => {
   // call next middleware passport authentication
   next();
 }, passport.authenticate('local.login', {
-  successRedirect: '/users',
+  successRedirect: '/dashboard',
   failureRedirect: '/users/login',
   failureFlash: true
 }));
@@ -55,8 +63,8 @@ router.get('/register', function(req, res) {
 /* process register */
 router.post('/register', (req, res, next) => {
     // first middleware to validation data
-    req.checkBody('username', 'Username không hợp lệ').notEmpty().isLength({min: 4, max: 50});
-    req.checkBody('password', 'Password không hợp lệ').notEmpty().isLength({min: 4, max: 50});
+    req.checkBody('username', 'Username không hợp lệ').isLength({min: 4, max: 50});
+    req.checkBody('password', 'Password không hợp lệ').isLength({min: 4, max: 50});
 
     // run the validator
     let errors = req.validationErrors();
@@ -77,26 +85,19 @@ router.post('/register', (req, res, next) => {
       next();
     }
   }, passport.authenticate('local.register', {
-    successRedirect: '/users/',
+    successRedirect: '/dashboard/',
     failureRedirect: '/users/register',
     failureFlash: true
-  }));
-
-/* process logout */
-router.get('/logout', isLoggedIn, function(req, res) {
-  req.logout();
-  res.redirect('/');
-});
-
-/* process to dashboard */
-router.get('/', isLoggedIn, function(req, res) {
-  res.render('user/index');
-});
+  }
+));
 
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
+  console.log('is log');
   // if user is authenticated in the session, carry on 
+  // manage by passport
   if (req.isAuthenticated()) {
+    console.log('is logged in.');
     return next();
   }
 
@@ -104,6 +105,12 @@ function isLoggedIn(req, res, next) {
   res.redirect('/');
 }
 
+/**
+ * middleware to verify that is login
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 function isNotLoggedIn(req, res, next) {
   // if user is authenticated in the session, carry on 
   if (!req.isAuthenticated()) {
@@ -111,7 +118,7 @@ function isNotLoggedIn(req, res, next) {
   }
 
   // if they aren't redirect them to the home page
-  res.redirect('/');
+  res.redirect('/dashboard');
 }
 
 module.exports = router;

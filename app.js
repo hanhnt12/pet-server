@@ -17,10 +17,9 @@ var app = express();
 
 //==================== configuration============================
 // conect to database
-mongoose.connect(config.url);
-
-// secret variable
-app.locals.superSecret = config.token.secret;
+mongoose.connect(config.url, {
+  useMongoClient: true
+});
 
 require('./config/passport');
 //==================== configuration============================
@@ -36,7 +35,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({ mongooseConnection: mongoose.connection }), // session store in mongodb
-  cookie: { 
+  cookie: {
     maxAge: config.token.expiresIn
   } // 3 hour
 }));
@@ -56,6 +55,12 @@ app.use(expressValidator());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// set login to all views
+app.use(function(req, res, next) {
+  res.locals.login = req.isAuthenticated();
+  next();
+})
+
 // setting common
 app.use(function (req, res, next) {
   // setting global check login
@@ -66,7 +71,7 @@ app.use(function (req, res, next) {
 });
 
 // setting cors
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -80,11 +85,13 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var carts = require('./routes/carts');
 var api = require('./routes/api/api');
+var dashboard = require('./routes/dashboard');
 var usersAPI = require('./routes/api/users');
 var productsAPI = require('./routes/api/products');
 var categoriesAPI = require('./routes/api/categories');
 
 app.use('/', index);
+app.use('/dashboard', dashboard);
 app.use('/users', users);
 app.use('/cart', carts);
 
@@ -120,13 +127,13 @@ if (app.get('env') === 'development') {
   });
 }
 
-app.use(function(req, res, next) {
-  mongoose.connect(function(err){
-      if(err){
-          var err = new Error('Database connection error! Try later please.');
-          err.status = 503;
-          next(err);    
-      }
+app.use(function (req, res, next) {
+  mongoose.connect(function (err) {
+    if (err) {
+      var err = new Error('Database connection error! Try later please.');
+      err.status = 503;
+      next(err);
+    }
   });
 });
 

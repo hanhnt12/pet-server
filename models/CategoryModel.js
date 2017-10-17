@@ -12,4 +12,16 @@ let schema = new Schema({
   displayOrder: { type: String, lowercase: true, default: '' },
 });
 
+schema
+.virtual('url')
+.get(function() {
+    return '/category/' + this._id;
+});
+
+schema
+.virtual('imageSrc')
+.get(function() {
+    return '/images/' + this.imagePath;
+});
+
 module.exports = mongoose.model('category', schema);

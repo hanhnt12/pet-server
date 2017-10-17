@@ -4,12 +4,13 @@ block content
   div(class='col-sm-6 col-sm-offset-3')
     h1
       span(class='fa fa-sign-in')
-      |  Đăng ký
+      |  Đăng nhập
 
+    // show any messages that come back with authentication
     include ../includes/error_message
 
-    <!-- REGISTER FORM -->
-    <form action="/users/register" method="post">
+    <!-- LOGIN FORM -->
+    <form action="/users/login" method="post">
       <div class="form-group">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" name="username" placeholder="enter your user name">
@@ -19,12 +20,12 @@ block content
         <input type="password" class="form-control" id="password" name="password" placeholder="enter your password">
       </div>
       include ../includes/csrf_token
-      <button type="submit" class="btn btn-warning btn-lg">Đăng ký</button>
+      <button type="submit" class="btn btn-warning btn-lg">Đăng nhập</button>
     </form>
 
     hr
 
-    <p>Bạn đã có tài khoản 
-      a(href='/users/login') Đăng nhập
+    <p>Bạn chưa có tài khoản?  
+      a(href='/users/register') Đăng ký
     <p>Hoặc đi tới 
-      a(href='/dashboard') Trang chủ
+      a(href='/') Trang chủ

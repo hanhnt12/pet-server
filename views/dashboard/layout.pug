@@ -1,0 +1,69 @@
+doctype html
+html(lang='en')
+  head
+    
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='icon' href='../../favicon.ico')
+
+    title= title
+
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/dashboard.css')
+    
+  body
+
+    div.navbar.navbar-inverse.navbar-fixed-top
+      div.container-fluid
+        div.navbar-header
+          button(type='button' class='navbar-toggle collapsed' 
+            data-toggle='collapse' data-target='#navbar' 
+            aria-expanded='false' aria-controls='navbar')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a(class='navbar-brand' href='#') Project name
+        div(id='navbar' class='navbar-collapse collapse')
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='/dashboard') Dashboard
+            li
+              a(href='/dashboard/settings') Settings
+            if login
+              li
+                a(href='/users/logout') Logout
+          form.navbar-form.navbar-right
+            input(class='form-control' placeholder='Search...')
+
+    div.container-fluid
+      div.row
+        div.col-sm-3.col-md-2.sidebar
+          ul.nav.nav-sidebar
+            li.active
+              a(href='#') Overview
+                span.sr-only (current)
+            li
+              a(href='#') Reports
+            li
+              a(href='#') Analytics
+            li
+              a(href='#') Export
+          ul.nav.nav-sidebar
+            li
+              a(href='/dashboard/products') Product
+            li
+              a(href='/dashboard/add_product') Add Product
+          ul.nav.nav-sidebar
+            li
+              a(href='/dashboard/categories') Category
+            li
+              a(href='/dashboard/add_category') Add Category
+        div.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+          block content
+
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    script(src='/javascripts/dashboard.js')

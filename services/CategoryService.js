@@ -39,7 +39,7 @@ exports.getCategories = async function (req, res) {
     }
     // Handler error
   } catch (err) {
-    Common.rederError(
+    Common.renderError(
       req,
       res,
       err,
@@ -53,11 +53,7 @@ exports.getCategories = async function (req, res) {
  * Get information to confirm category
  */
 exports.updateCategoryGet = async function (req, res, next) {
-  // define common value
-  let error = [{ msg: 'Category không tồn tại.' }];
-
   try {
-
     // santize
     req.sanitize('categoryId').escape();
     req.sanitize('categoryId').trim();
@@ -71,6 +67,7 @@ exports.updateCategoryGet = async function (req, res, next) {
 
     // if can not get category
     if (!category) {
+      let error = Common.createObjError('', 'Category', false);
       res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
         title: Common.CATEGORY_TITLE_UPDATE,
         errorMessage: error
@@ -82,7 +79,7 @@ exports.updateCategoryGet = async function (req, res, next) {
       });
     }
   } catch (err) {
-    Common.rederError(
+    Common.renderError(
       req,
       res,
       err,
@@ -126,7 +123,7 @@ exports.updateCategoryPost = async function (req, res, next) {
     });
 
   } catch (err) {
-    Common.rederError(
+    Common.renderError(
       req,
       res,
       err,

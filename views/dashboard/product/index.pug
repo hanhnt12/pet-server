@@ -1,0 +1,39 @@
+extends ../layout
+
+block content
+  h1.page-header= title
+  div.well.well-sm
+    strong #{title} 
+      div.btn-group
+        a(href="#" id="list" click="changeToList()" class="btn btn-default btn-sm")
+          span.glyphicon.glyphicon-th-list
+          span List 
+        span
+        a(href="#" id="grid" click="changeToGrid()" class="btn btn-default btn-sm")
+          span.glyphicon.glyphicon-th Grid 
+      </div>
+    div#products.row.list-group
+      each product, index in products
+        div.listOrGrid.item.col-sm-6.col-md-4
+          div.thumbnail
+            img.group.list-group-image.img-response(src=product.imagePath alt="")
+            div.caption
+              h3.title !{product.title}
+              h4.group.inner.list-group-item-heading !{product.name}
+              p.group.inner.list-group-item-text.description !{product.descriptionDisplay}
+              div.row
+                div.col-sm-4.col-md-4
+                  p.lead.price !{product.price}
+                div.col-sm-8.col-md-8
+                  //- a.btn.btn-success(href="/#") Chi tiết
+                  a.btn.btn-sm.btn-warning(data-toggle="tooltip"
+                    data-original-title="Chỉnh sửa" href=product.urlUpdate) Sửa 
+                    | 
+                    i.glyphicon.glyphicon-edit
+                  span 
+                  a.btn.btn-sm.btn-danger(data-toggle="tooltip"
+                    data-original-title="Xóa" href=product.urlDelete) Xóa 
+                    |
+                    i.glyphicon.glyphicon-remove 
+      else
+        div.alert.alert-warning Không tồn tại sản phẩm nào

@@ -13,6 +13,5 @@ module.exports = {
   commonError: {
     success: false,
     message: 'Chúng tôi rất đông đúc. <br />Vui lòng quay lại sau.'
-  },
-  DASH_BOARD: 'dashboard'
+  }
 }

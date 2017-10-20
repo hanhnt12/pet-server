@@ -12,10 +12,10 @@ exports.validateCategoryId = function (req, res, next) {
   // validate category id
   if (!Common.isValidObjectId(categoryId)) {
     // define error
-    let error = [{ msg: 'Category không tồn tại.' }];
+    let error = Common.createObjError('', 'Category', false);
 
     // render screen error
-    Common.rederError(
+    Common.renderError(
       req,
       res,
       error,
@@ -69,7 +69,7 @@ exports.validateUpdatePost = function (req, res, next) {
     };
 
     // render screen error
-    Common.rederError(
+    Common.renderError(
       req,
       res,
       errors,

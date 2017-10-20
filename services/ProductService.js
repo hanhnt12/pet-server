@@ -21,13 +21,10 @@ async function getProduct(productId) {
 
 /**
  * Get list products
+ * for dashboard and api
  */
 exports.getProducts = async function (req, res, next) {
   try {
-
-    // define common path render
-    let pathRender = 'dashboard/product/index';
-    let title = 'Danh sách sản phẩm';
 
     // sort desc by createDate, price
     let sort = { sort: { createDate: -1, price: -1 } };
@@ -40,8 +37,8 @@ exports.getProducts = async function (req, res, next) {
 
     // check route to display
     if (Common.isDashboardRote(req)) {
-      res.render(pathRender, {
-        title: title,
+      res.render(Common.PRODUCT_PATH_RENDER, {
+        title: Common.PRODUCT_TITLE,
         products: products
       });
     } else {
@@ -49,7 +46,13 @@ exports.getProducts = async function (req, res, next) {
       res.json(products);
     }
   } catch (err) {
-    Common.rederError(req, res, err, pathRender, title);
+    Common.renderError(
+      req,
+      res,
+      err,
+      Common.PRODUCT_PATH_RENDER,
+      Common.PRODUCT_TITLE
+    );
   }
 }
 

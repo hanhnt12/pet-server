@@ -1,10 +1,16 @@
 const config = require('../config/config');
 
 // define constant
+const DASH_BOARD = 'dashboard';
+// for category
 exports.CATEGORY_PATH_RENDER = 'dashboard/category/index';
 exports.CATEGORY_PATH_RENDER_UPDATE = 'dashboard/category/update';
 exports.CATEGORY_TITLE = 'Category information';
 exports.CATEGORY_TITLE_UPDATE = 'Update category information';
+
+// for product
+exports.PRODUCT_PATH_RENDER = 'dashboard/product/index';
+exports.PRODUCT_TITLE = 'Danh sách sản phẩm';
 
 // status sucess update
 exports.updateSuccess = {
@@ -40,7 +46,7 @@ function isDashboardRote(req) {
   customLog(req, 'isDashboardRote', req.originalUrl);
 
   // if url contains dashboard
-  if (req.originalUrl.indexOf(config.DASH_BOARD) > 0) {
+  if (req.originalUrl.indexOf(DASH_BOARD) > 0) {
     return true;
   }
 
@@ -119,10 +125,59 @@ function isValidObjectId(id) {
   return false;
 }
 
+/**
+ * function to create common object error
+ * @param {string} msg 
+ */
+function createObjError(msg, itemName, exist) {
+
+  // if exist message, render it
+  if (!msg) {
+    message = msg;
+  } else {
+
+    // if not exist message, create new message
+    message = `${itemName}`;
+    // if error about exist data
+    if (!exist) {
+      message += ` không tồn tại.`;
+    } else {
+      message = ` đã có lỗi xảy ra`
+    }
+  }
+  // return common error object
+  return {
+    msg: message
+  }
+}
+
+/**
+ * Cut characters before display
+ * input: string, length after cut
+ */
+function cutCharacter(strInput, length) {
+
+  // if input doesn't exist return empty string
+  if (!strInput) {
+    return '';
+  }
+
+  // cut character
+  if (strInput.length > length) {
+    return strInput.slice(0, length) + '...'
+  } else {
+    return strInput
+  }
+}
+
 exports.customLog = customLog;
 
 exports.isDashboardRote = isDashboardRote;
 
-exports.rederError = renderError;
+exports.renderError = renderError;
 
 exports.isValidObjectId = isValidObjectId;
+
+exports.createObjError = createObjError;
+
+exports.cutCharacter = cutCharacter

@@ -1,0 +1,51 @@
+extends ../layout
+
+block content
+  h1.page-header= title
+
+  // show error message
+  if errorMessage && errorMessage.length > 0
+    each error in errorMessage
+      div.alert.alert-danger #{error.msg}
+
+  // show status update
+  if completed && completed.success
+    div.alert.alert-success #{completed.message}
+
+  if category
+    form.form-horizontal(method="POST")
+      //- div.form-group
+      //-   label.control-label.col-sm-2(for='imagePath') Image:
+      //-   div.col-sm-10
+      //-     input.form-control#imagePath(type="file" value=category.imagePath name="imagePath")
+      div.form-group
+        label.control-label.col-sm-2(for='name') Category name:
+        div.col-sm-10
+          input.form-control#name(value=category.name name="name" disabled)
+          input.form-control#name(type="hidden" value!=category.name name="name")
+      div.form-group
+        label.control-label.col-sm-2(for='title') Category title:
+        div.col-sm-10
+          input.form-control#title(value!=category.title name="title")
+      div.form-group
+        label.control-label.col-sm-2(for='description') Category description:
+        div.col-sm-10
+          textarea.form-control#description(name="description" rows="10") !{category.description}
+      div.form-group
+        div.col-sm-2 
+          label Trạng thái hiển thị:
+        div.col-sm-10
+          label
+            input(type="radio" name="display" value="1" checked=category.display)
+            | Hiển thị
+          span   
+          label
+            input(type="radio" name="display" value="0" checked=!category.display)
+            | Không hiển thị
+      div.form-group
+        div.col-sm-2
+        div.col-sm-10
+          input.btn.btn-warning(type="submit" value="Update")
+  else
+    div.alert.alert-warning Không tồn tại category
+    

@@ -6,17 +6,24 @@ block content
     div.row.user-row
       div.col-xs-3.col-sm-2.col-md-1.col-lg-1
         img.img-circle(src=category.imageSrc alt=category.name)
-      div.col-xs-8.col-sm-9.col-md-10.col-lg-10
+      div.col-xs-7.col-sm-8.col-md-9.col-lg-9
         strong= category.name 
-        span.text-muted  Title: #{category.title}
-      div.col-xs-1.col-sm-1.col-md-1.col-lg-1.dropdown-user(data-for="." + index + "_" + category.name)
-        i.glyphicon.glyphicon-chevron-down.text-muted
+        | 
+        span.text-muted !{category.title}
+      div.col-xs-1.col-sm-1.col-md-1.col-lg-1.dropdown-user
+        span
+          a.btn.btn-sm.btn-warning(data-toggle="tooltip"
+            data-original-title="Chỉnh sửa" href=category.urlUpdate)
+            i.glyphicon.glyphicon-edit 
+      div.col-xs-1.col-sm-1.col-md-1.col-lg-1.dropdown-user(data-for="." + index + "_" + category.name.replace(/\s/g, ''))
+        i.glyphicon.glyphicon-chevron-down.text-muted(data-toggle="tooltip"
+            data-original-title="Xem chi tiết")
 
-    div(class="row user-infos" class=[index + "_" + category.name])
+    div(class="row user-infos" class=[index + "_" + category.name.replace(/\s/g, '')])
       div.col-xs-12.col-sm-12.col-md-10.col-lg-10.col-xs-offset-0.col-sm-offset-0.col-md-offset-1.col-lg-offset-1
         div.panel.panel-primary
           div.panel-heading
-            div.panel-title= title
+            div.panel-title !{category.name}
           div.panel-body
             div.row
               div.col-md-3.col-lg-3.hidden-xs.hidden-sm
@@ -29,15 +36,34 @@ block content
                   tbody
                     tr
                       td Description: 
-                      td= category.description
+                      td !{category.description}
                     tr
-                      td Số lượng:
-                      td= category.amount
-          div.panel-footer
-            span
-              button.btn.btn-sm.btn-warning(data-toggle="tooltip"
-                data-original-title="Chỉnh sửa")
-                i.glyphicon.glyphicon-edit 
-              button.btn.btn-sm.btn-danger(data-toggle="tooltip"
-                data-original-title="Xóa category này")
-                i.glyphicon.glyphicon-remove
+                      td Số lượng sản phẩm:
+                      td !{category.amount}
+                    tr
+                      td Trạng thái:
+                      td
+                        if category.display
+                          span.bg-success 
+                            i.fa.fa-eye 
+                            | 
+                            b !{category.status}
+                        else
+                          span.bg-danger
+                            i.fa.fa-eye-slash 
+                            | 
+                            b !{category.status}
+                    tr
+                      td Thứ tự hiển thị:
+                      td
+                        span.badge.bg-primary= category.displayOrder
+          //- div.panel-footer
+            //- span
+            //-   a.btn.btn-sm.btn-warning(data-toggle="tooltip"
+            //-     data-original-title="Chỉnh sửa" href=category.urlUpdate)
+            //-     i.glyphicon.glyphicon-edit 
+              //- button.btn.btn-sm.btn-danger(data-toggle="tooltip"
+              //-   data-original-title="Xóa category này")
+              //-   i.glyphicon.glyphicon-remove
+  else
+      div.alert.alert-warning Không tồn tại category

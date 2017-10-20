@@ -1,13 +1,11 @@
 let ProductModel = require('../models/ProductModel');
 const config = require('../config/config');
+const Common = require('../common/common');
 
 // common function get products
 async function getProducts(query = {}, projection = null, sort = {}) {
   // get list products
-  console.log('before');
   let products = await ProductModel.find(query, projection, sort);
-  console.log(products);
-  console.log('after');
   return products;
 }
 
@@ -21,21 +19,37 @@ async function getProduct(productId) {
   return product;
 }
 
-// get list products
+/**
+ * Get list products
+ */
 exports.getProducts = async function (req, res, next) {
-  console.log('get products default');
   try {
+
+    // define common path render
+    let pathRender = 'dashboard/product/index';
+    let title = 'Danh sách sản phẩm';
+
     // sort desc by createDate, price
     let sort = { sort: { createDate: -1, price: -1 } };
 
     // get list products
     let products = await getProducts({}, null, sort);
 
-    // output json
-    res.json(products);
-  } catch (error) {
-    console.log(err);
-    res.json(config.commonError);
+    // log result
+    Common.customLog(req, 'getProducts', products);
+
+    // check route to display
+    if (Common.isDashboardRote(req)) {
+      res.render(pathRender, {
+        title: title,
+        products: products
+      });
+    } else {
+      // output json
+      res.json(products);
+    }
+  } catch (err) {
+    Common.rederError(req, res, err, pathRender, title);
   }
 }
 
@@ -89,7 +103,7 @@ exports.getProduct = async function (req, res, next) {
 exports.createProduct = async function (req, res, next) {
   console.log('create product');
   try {
-    
+
   } catch (error) {
     console.log(err);
     res.json(config.commonError);

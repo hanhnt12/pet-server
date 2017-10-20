@@ -1,14 +1,16 @@
 var express = require('express');
 var router = express.Router();
+const CategoryController = require('../controllers/CategoryController');
 const CategoryService = require('../services/CategoryService');
+const ProductService = require('../services/ProductService');
 
 // verify user was loged in can access
-router.use('/', isLoggedIn, function(req, res, next) {  
+router.use('/', isLoggedIn, function (req, res, next) {
   next();
 });
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.render('dashboard/index', { title: 'Welcome to System dashboard' });
 });
 
@@ -17,6 +19,30 @@ router.get('/', function(req, res, next) {
  * path: /dashboard/categories
  */
 router.get('/categories', CategoryService.getCategories);
+
+/**
+ * get information to update category
+ * path: /dashboard/:categoryId/update
+ * validate category and get category details
+ */
+router.get('/category/:categoryId/update',
+  CategoryController.validateCategoryId,
+  CategoryService.updateCategoryGet);
+
+/**
+ * update category
+ * path: /dashboard/:categoryId/update
+ * validate and update category
+ */
+router.post('/category/:categoryId/update',
+  CategoryController.validateCategoryId,
+  CategoryController.validateUpdatePost,
+  CategoryService.updateCategoryPost);
+
+/**
+ * Get list products
+ */
+router.get('/products', ProductService.getProducts);
 
 /**
  * middleware to verify that user was logedin to access to dashboard

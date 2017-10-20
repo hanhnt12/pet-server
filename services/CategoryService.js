@@ -1,20 +1,26 @@
 let CategoryModel = require('../models/CategoryModel');
 const config = require('../config/config');
+const Common = require('../common/common');
 
-// get list categories
+/**
+ * Get list categories
+ */
 exports.getCategories = async function (req, res) {
   try {
     // query
     let query = { display: true };
     let dashboardF = false;
 
-    console.log(req.originalUrl);
-    if (req.originalUrl.indexOf(config.DASH_BOARD) > 0) {
-      dashboardF = true;
-      query = {};
-    }
     // projection
     let projection = 'imagePath name title description amount'
+
+    // when route from dashboard, query all and projection all
+    if (Common.isDashboardRote(req)) {
+      dashboardF = true;
+      query = {};
+      projection = '';
+    }
+
     // sorting follow displayOrder
     // 1: asc: -1: desc
     let sort = { sort: { displayOrder: 1 } };
@@ -26,15 +32,106 @@ exports.getCategories = async function (req, res) {
       // output json
       res.json(categories);
     } else {
-      res.render('dashboard/category/index', {
-        title: 'Category information',
+      res.render(Common.CATEGORY_PATH_RENDER, {
+        title: Common.CATEGORY_TITLE,
         categories: categories
       });
     }
     // Handler error
   } catch (err) {
-    console.log(err);
-    res.json(config.commonError);
+    Common.rederError(
+      req,
+      res,
+      err,
+      Common.CATEGORY_PATH_RENDER,
+      Common.CATEGORY_TITLE
+    );
   }
 }
 
+/**
+ * Get information to confirm category
+ */
+exports.updateCategoryGet = async function (req, res, next) {
+  // define common value
+  let error = [{ msg: 'Category không tồn tại.' }];
+
+  try {
+
+    // santize
+    req.sanitize('categoryId').escape();
+    req.sanitize('categoryId').trim();
+
+    // get category id
+    let categoryId = req.params.categoryId
+
+    // use model to query db
+    let category = await CategoryModel.findById(categoryId);
+    Common.customLog(req, 'updateCategoryGet', category);
+
+    // if can not get category
+    if (!category) {
+      res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
+        title: Common.CATEGORY_TITLE_UPDATE,
+        errorMessage: error
+      });
+    } else {
+      res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
+        title: Common.CATEGORY_TITLE_UPDATE,
+        category: category
+      });
+    }
+  } catch (err) {
+    Common.rederError(
+      req,
+      res,
+      err,
+      Common.CATEGORY_PATH_RENDER_UPDATE,
+      Common.CATEGORY_TITLE_UPDATE
+    );
+  }
+}
+
+/**
+ * Update category
+ */
+exports.updateCategoryPost = async function (req, res, next) {
+  try {
+    // get category id
+    let categoryId = req.params.categoryId
+
+    // create object to update
+    let category = new CategoryModel({
+      name: req.body.name,
+      title: req.body.title,
+      description: req.body.description,
+      display: req.body.display === "1",
+      _id: categoryId
+    });
+
+    // log value to update
+    Common.customLog(req, 'updateCategoryPost', 'value to update', category);
+
+    // Update category
+    let result = await CategoryModel.findByIdAndUpdate(categoryId, category, {});
+
+    // log result update
+    Common.customLog(null, 'updateCategoryPost', 'Result update', result);
+
+    // render again
+    res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
+      title: Common.CATEGORY_TITLE_UPDATE,
+      category: category,
+      completed: Common.updateSuccess
+    });
+
+  } catch (err) {
+    Common.rederError(
+      req,
+      res,
+      err,
+      Common.CATEGORY_PATH_RENDER_UPDATE,
+      Common.CATEGORY_TITLE_UPDATE
+    );
+  }
+}

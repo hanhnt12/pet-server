@@ -2,6 +2,10 @@ const config = require('../config/config');
 
 // define constant
 const DASH_BOARD = 'dashboard';
+
+// for dashboard
+exports.DASHBOARD_PATH_RENDER = 'dashboard/index';
+exports.DASHBOARD_TITLE = 'Welcome to System dashboard';
 // for category
 exports.CATEGORY_PATH_RENDER = 'dashboard/category/index';
 exports.CATEGORY_PATH_RENDER_UPDATE = 'dashboard/category/update';
@@ -11,6 +15,8 @@ exports.CATEGORY_TITLE_UPDATE = 'Update category information';
 // for product
 exports.PRODUCT_PATH_RENDER = 'dashboard/product/index';
 exports.PRODUCT_TITLE = 'Danh sách sản phẩm';
+exports.PRODUCT_ADD_PATH_RENDER = 'dashboard/product/add';
+exports.PRODUCT_ADD_TITLE = 'Thêm mới sản phẩm';
 
 // record per page products
 exports.DEFAULT_RECORD_PER_PAGE = 6;
@@ -32,7 +38,7 @@ exports.insertSuccess = {
  */
 function customLog(req, ...value) {
   if (req) {
-    console.log(req.method + ': ' + req.url);
+    console.log(new Date() + req.method + ': ' + req.url);
   }
 
   for (val of value) {
@@ -60,10 +66,28 @@ function isDashboardRote(req) {
  * handler common error
  * both web and api
  */
-function renderError(req, res, err, pathRender, title) {
+function renderError(req, res, err, pathRender, title, dataError) {
 
-  // log error
-  customLog(req, 'renderError', err);
+  var errors = [];
+
+  // if error can not handler
+  // only display first error by break in for loop
+  if (!err || (err.constructor !== Array && !err.msg)) {
+    customLog(null, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ', err);
+    errors.push(createObjError('Chúng tôi rất đông đúc. <br/> Vui lòng quay lại sau.'));
+    customLog(null, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
+  } else {
+    for (let i = 0; i < err.length; i++) {
+      if (err[i].msg) {
+        errors.push(createObjError(err[i].msg));
+      } else {
+        customLog(req, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
+        errors.push(createObjError('Undefined message error.'));
+        customLog(req, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
+      }
+      break;
+    }
+  }
 
   // set default title
   if (!title) {
@@ -74,7 +98,8 @@ function renderError(req, res, err, pathRender, title) {
   if (isDashboardRote(req)) {
     res.render(pathRender, {
       title: title,
-      errorMessage: err
+      errorMessage: errors,
+      dataError: dataError
     });
   } else {
     // log error for api
@@ -113,6 +138,34 @@ exports.checkBodyRequestLength = (req, item, min = 4, max = 50) => {
 }
 
 /**
+ * check item is number
+ */
+exports.checkBodyRequestNumber = (req, item) => {
+  // if not set item then return
+  if (!item) {
+    return;
+  }
+
+  // create message error
+  let message = `${item} phải là kiểu số.`;
+
+  // validate
+  req.checkBody(item, message).isNumeric();
+}
+
+/**
+ * santize item
+ */
+exports.santizeItem = (req, item) => {
+  // if not set item then return
+  if (!item) {
+    return;
+  }
+  req.sanitize(item).escape();
+  req.sanitize(item).trim();
+}
+
+/**
  * validate object id of mongo
  */
 function isValidObjectId(id) {
@@ -135,7 +188,7 @@ function isValidObjectId(id) {
 function createObjError(msg, itemName, exist) {
 
   // if exist message, render it
-  if (!msg) {
+  if (msg) {
     message = msg;
   } else {
 

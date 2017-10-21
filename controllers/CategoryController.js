@@ -74,7 +74,8 @@ exports.validateUpdatePost = function (req, res, next) {
       res,
       errors,
       Common.CATEGORY_PATH_RENDER_UPDATE,
-      Common.CATEGORY_TITLE_UPDATE
+      Common.CATEGORY_TITLE_UPDATE,
+      category
     );
   } else {
     next();

@@ -2,6 +2,11 @@ extends ../layout
 
 block content
   h1.page-header= title
+
+  // show status of last screen
+  if completed && completed.success
+    div.alert.alert-success #{completed.message}
+
   // form search
   div.row
     div.col-sm-5.col-md-5

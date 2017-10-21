@@ -1,17 +1,25 @@
 var express = require('express');
 var router = express.Router();
 const CategoryController = require('../controllers/CategoryController');
+const ProductController = require('../controllers/ProductController');
 const CategoryService = require('../services/CategoryService');
 const ProductService = require('../services/ProductService');
+
+const Common = require('../common/common');
 
 // verify user was loged in can access
 router.use('/', isLoggedIn, function (req, res, next) {
   next();
 });
 
-/* GET home page. */
+/**
+ * GET home page.
+ * system dashboard
+ */
 router.get('/', function (req, res, next) {
-  res.render('dashboard/index', { title: 'Welcome to System dashboard' });
+  res.render(Common.DASHBOARD_PATH_RENDER, {
+    title: Common.DASHBOARD_TITLE
+  });
 });
 
 /**
@@ -27,7 +35,8 @@ router.get('/categories', CategoryService.getCategories);
  */
 router.get('/category/:categoryId/update',
   CategoryController.validateCategoryId,
-  CategoryService.updateCategoryGet);
+  CategoryService.updateCategoryGet
+);
 
 /**
  * update category
@@ -37,12 +46,43 @@ router.get('/category/:categoryId/update',
 router.post('/category/:categoryId/update',
   CategoryController.validateCategoryId,
   CategoryController.validateUpdatePost,
-  CategoryService.updateCategoryPost);
+  CategoryService.updateCategoryPost
+);
 
 /**
  * Get list products
+ * path: /dashboard/products
  */
-router.get('/products', ProductService.searchProduct);
+router.get('/products',
+  ProductController.validateSearch,
+  ProductService.searchProduct
+);
+
+/**
+ * Add new products
+ * path: /dashboard/product/add
+ * get list category before render to display selectbox
+ */
+router.get('/product/add',
+  CategoryService.getCategoryName,
+  function (req, res, next) {
+    res.render(Common.PRODUCT_ADD_PATH_RENDER, {
+      title: Common.PRODUCT_ADD_TITLE,
+      categories: req.categories
+    });
+  }
+);
+
+/**
+ * Add new products
+ * path: /dashboard/product/add
+ * get list category before render to display selectbox
+ */
+router.post('/product/add',
+  CategoryService.getCategoryName,
+  ProductController.validateAddPost,
+  ProductService.addProduct
+);
 
 /**
  * middleware to verify that user was logedin to access to dashboard

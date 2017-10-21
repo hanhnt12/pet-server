@@ -4,15 +4,15 @@ block content
   h1.page-header= title
 
   // show error message
-  if errorMessage && errorMessage.length > 0
-    each error in errorMessage
-      div.alert.alert-danger #{error.msg}
+  include ../../includes/error_message
 
   // show status update
   if completed && completed.success
     div.alert.alert-success #{completed.message}
 
-  if category
+  if category || dataError
+    if dataError
+      - category = dataError
     form.form-horizontal(method="POST")
       //- div.form-group
       //-   label.control-label.col-sm-2(for='imagePath') Image:

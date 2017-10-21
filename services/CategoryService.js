@@ -3,6 +3,42 @@ const config = require('../config/config');
 const Common = require('../common/common');
 
 /**
+ * Get list categories name
+ */
+exports.getCategoryName = async function (req, res, next) {
+  try {
+    // query
+    let query = { display: true };
+
+    // only get name and _id
+    let projection = 'name'
+
+    // sorting follow displayOrder
+    // 1: asc: -1: desc
+    let sort = { sort: { displayOrder: 1 } };
+    // use model to query db
+    let categories = await CategoryModel.find(query, projection, sort);
+
+    // set result to request
+    req.categories = categories;
+
+    // next handler
+    next();
+
+    // Handler error
+  } catch (err) {
+    Common.renderError(
+      req,
+      res,
+      err,
+      Common.CATEGORY_PATH_RENDER,
+      Common.CATEGORY_TITLE
+    );
+  }
+}
+
+
+/**
  * Get list categories
  */
 exports.getCategories = async function (req, res) {

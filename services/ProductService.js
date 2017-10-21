@@ -3,7 +3,7 @@ const config = require('../config/config');
 const Common = require('../common/common');
 
 // default projection
-const DEFAULT_PROJECTION = 'imagePath title price views'
+const DEFAULT_PROJECTION = 'image title price views'
 
 // common function get products
 async function getProducts(query = {}, projection = null, sort = {}, paggingObj) {
@@ -143,12 +143,6 @@ exports.searchProduct = async function (req, res, next) {
     let productTitle = req.query.q || req.body.q;
     let page = req.query.page || req.body.page || 1;
 
-    // santize
-    req.sanitize('category').escape();
-    req.sanitize('category').trim();
-    req.sanitize('q').escape();
-    req.sanitize('q').trim();
-
     // log parameter
     Common.customLog(req, `category: ${categoryName}`, `title: ${productTitle}`, `page: ${page}`);
 
@@ -177,6 +171,10 @@ exports.searchProduct = async function (req, res, next) {
     // create pagging object
     let paggingObj = Common.calculatePagging(page);
 
+    // sorting follow displayOrder
+    // 1: asc: -1: desc
+    let sort = { sort: { createDate: -1 } };
+
     // search product
     let products = await getProducts(objSearch, DEFAULT_PROJECTION, {}, paggingObj);
 
@@ -203,6 +201,35 @@ exports.searchProduct = async function (req, res, next) {
       err,
       Common.PRODUCT_PATH_RENDER,
       Common.PRODUCT_TITLE
+    );
+  }
+}
+
+/**
+ * Add new product
+ */
+exports.addProduct = async function (req, res, next) {
+  try {
+
+    // get product from validate ok
+    let product = new ProductModel(req.product);
+
+    // save product
+    let result = await product.save();
+
+    // render screen
+    res.redirect('/dashboard/products');
+
+  } catch (err) {
+    Common.renderError(
+      req,
+      res,
+      err,
+      Common.PRODUCT_ADD_PATH_RENDER,
+      Common.PRODUCT_ADD_TITLE,
+      {
+        categories: req.categories
+      }
     );
   }
 }

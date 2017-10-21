@@ -1,5 +1,4 @@
 //- // show any messages that come back with authentication
-if message.length > 0
-  div(class='alert alert-danger')
-    for err in message
-      p #{err}
+if errorMessage && errorMessage.length > 0
+  each error in errorMessage
+    div.alert.alert-danger !{error.msg}

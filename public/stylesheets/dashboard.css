@@ -214,6 +214,7 @@ body {
 {
     float: left;
     max-height: 150px;
+    max-width: 140px;
 }
 .item.list-group-item:after
 {
@@ -225,4 +226,23 @@ body {
 }
 /*
 * END DASHBOARD LIST PRODUCT: product/index
+*/
+
+
+/*
+* START DASHBOARD SEARCH PRODUCT: product/index
+*/
+#searchClear {
+  position: absolute;
+  right: 42px;
+  top: 0;
+  bottom: 0;
+  height: 14px;
+  margin: auto;
+  font-size: 14px;
+  cursor: pointer;
+  color: #ccc;
+}
+/*
+* END DASHBOARD SEARCH PRODUCT: product/index
 */

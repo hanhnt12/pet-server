@@ -1,0 +1,30 @@
+if products
+  if totalPage > 1
+    ul.pagination
+      // if current page is not first page, display << previous
+      - let link = '?'
+      // if exist url (parameter) then add '&'
+      if url
+        - link = '?' + url + '&'
+      if page > 1
+        li
+          - let linkFirst = link + 'page=1'
+          a(href=linkFirst) &laquo;
+
+      // display page
+      - for (i = 1; i <= totalPage; i++)
+        if (page == i)
+          li.active
+            span.sr_onli
+              = i
+        else
+          li
+            - let linkNumber = link + 'page=' + i
+            a(href=linkNumber)
+              = i
+
+      // if current page is not first page, display >> next
+      if page < totalPage
+        li
+          - let linkLast = link + 'page=' + Math.floor(totalPage)
+          a(href=linkLast) &raquo;

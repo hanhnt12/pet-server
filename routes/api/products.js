@@ -8,9 +8,6 @@ router.get('/', ProductService.getProducts);
 /* get list products depend on categories*/
 router.get('/:category', ProductService.getProductsByCategory);
 
-/* create new product*/
-router.post('/', ProductService.createProduct);
-
 /**
  * Get product details
  */

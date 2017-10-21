@@ -12,6 +12,9 @@ exports.CATEGORY_TITLE_UPDATE = 'Update category information';
 exports.PRODUCT_PATH_RENDER = 'dashboard/product/index';
 exports.PRODUCT_TITLE = 'Danh sách sản phẩm';
 
+// record per page products
+exports.DEFAULT_RECORD_PER_PAGE = 6;
+
 // status sucess update
 exports.updateSuccess = {
   success: true,
@@ -170,6 +173,61 @@ function cutCharacter(strInput, length) {
   }
 }
 
+/**
+ * create pagging object
+ */
+function calculatePagging(page, perPage) {
+
+  // set default page
+  if (!Number.isInteger(parseInt(page)) || page < 1) {
+    page = 1;
+  }
+
+  // calculate pagging
+  let limit = Number.isInteger(perPage) || this.DEFAULT_RECORD_PER_PAGE
+  let skip = limit * (page - 1);
+
+  customLog(null, 'calculatePagging', 'page: ', page)
+
+  // create paging object
+  return {
+    skip: skip,
+    limit: limit
+  }
+}
+
+/**
+ * check object is empty
+ */
+function isEmpty(obj) {
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+
+  return JSON.stringify(obj) === JSON.stringify({});
+}
+
+/**
+ * create url for pagging
+ * @param {request} req 
+ */
+function createUrlPagination(req) {
+  let qs = require('querystring');
+  let params = req.query;
+
+  delete params.page
+
+  console.log(null, 'createUrlPagination', params, req.url, qs.stringify(params));
+
+  if (isEmpty(params)) {
+    return '';
+  }
+
+  return qs.stringify(params);
+}
+
 exports.customLog = customLog;
 
 exports.isDashboardRote = isDashboardRote;
@@ -181,3 +239,9 @@ exports.isValidObjectId = isValidObjectId;
 exports.createObjError = createObjError;
 
 exports.cutCharacter = cutCharacter
+
+exports.calculatePagging = calculatePagging
+
+exports.createUrlPagination = createUrlPagination
+
+exports.isEmpty = isEmpty

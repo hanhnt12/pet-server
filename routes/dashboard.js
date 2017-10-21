@@ -42,7 +42,7 @@ router.post('/category/:categoryId/update',
 /**
  * Get list products
  */
-router.get('/products', ProductService.getProducts);
+router.get('/products', ProductService.searchProduct);
 
 /**
  * middleware to verify that user was logedin to access to dashboard

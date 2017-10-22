@@ -51,9 +51,9 @@ exports.validateAddPost = function (req, res, next) {
   // validate data
   Common.checkBodyRequestLength(req, 'title', 10, 100);
   Common.checkBodyRequestLength(req, 'description', 10, 4000);
-  Common.checkBodyRequestNumber(req, 'amount');
-  Common.checkBodyRequestNumber(req, 'price');
-  Common.checkBodyRequestNumber(req, 'priceSale');
+  // Common.checkBodyRequestNumber(req, 'amount');
+  // Common.checkBodyRequestNumber(req, 'price');
+  // Common.checkBodyRequestNumber(req, 'priceSale');
 
   // santize
   Common.santizeItem(req, 'title');
@@ -71,10 +71,12 @@ exports.validateAddPost = function (req, res, next) {
     errors.push(Common.createObjError(null, 'Loại sản phẩm'))
   }
 
+  let images = Common.createImageObject(req);
+
   // create object to keep data
   let product = {
     title: req.body.title,
-    imagePath: req.body.imagePath,
+    image: images,
     category: category,
     description: req.body.description,
     amount: req.body.amount,
@@ -82,6 +84,8 @@ exports.validateAddPost = function (req, res, next) {
     priceSale: req.body.priceSale,
     categories: req.categories
   };
+
+  Common.customLog(req,'validateAddPost: ', product);
 
   // when validate have error
   if (errors && errors.length > 0) {

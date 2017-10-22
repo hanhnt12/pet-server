@@ -22,7 +22,7 @@ let schema = new Schema({
   views: { type: Number, default: 1 },
   starts: { type: Number, default: 1 },
   createDate: { type: Date, default: Date.now },
-  uddateDate: { type: Date, default: Date.now },
+  updateDate: { type: Date, default: Date.now }
 });
 
 schema

@@ -1,0 +1,22 @@
+// show status of last screen
+if completed
+  //- div.alert.alert-success #{completed.message}
+
+  if completed.success
+    - var title = "Resopne ok"
+  else
+    - var title = "Có lỗi xảy ra"
+
+  // modal delete
+  div#statusModal.modal.fade(role="dialog")
+    div.modal-dialog
+
+      // modal content
+      div.modal-content
+        div.modal-header
+          button.close(type="button" data-dismiss="modal") &times;
+          h4.modal-title= title
+        div.modal-body
+          p #{completed.message}
+        div.modal-footer
+          button.btn.btn-default(type="button" data-dismiss="modal") OK

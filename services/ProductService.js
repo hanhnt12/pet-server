@@ -3,7 +3,7 @@ const config = require('../config/config');
 const Common = require('../common/common');
 
 // default projection
-const DEFAULT_PROJECTION = 'image title price views'
+const DEFAULT_PROJECTION = 'image title price priceSale views category'
 
 // common function get products
 async function getProducts(query = {}, projection = null, sort = {}, paggingObj) {
@@ -176,7 +176,7 @@ exports.searchProduct = async function (req, res, next) {
     let sort = { sort: { createDate: -1 } };
 
     // search product
-    let products = await getProducts(objSearch, DEFAULT_PROJECTION, {}, paggingObj);
+    let products = await getProducts(objSearch, DEFAULT_PROJECTION, sort, paggingObj);
 
     // check route to display
     if (Common.isDashboardRote(req)) {
@@ -230,6 +230,73 @@ exports.addProduct = async function (req, res, next) {
       {
         categories: req.categories
       }
+    );
+  }
+}
+
+/**
+ * find product
+ */
+exports.findProducById = async function (req, res, next) {
+  try {
+
+    // get product id from request
+    let productId = req.params.productId;
+
+    // get product information
+    let product = await ProductModel.findById(productId);
+
+    // render screen
+    req.product = product;
+
+    next();
+
+  } catch (err) {
+    Common.renderError(
+      req,
+      res,
+      err,
+      Common.PRODUCT_PATH_RENDER,
+      Common.PRODUCT_TITLE
+    );
+  }
+}
+
+/**
+ * Delete product
+ */
+exports.deleteProduct = async function (req, res, next) {
+  try {
+
+    // get product id from request
+    let productId = req.params.productId;
+    let complete = Common.deleteSuccess;
+
+    // get product information
+    let product = await ProductModel.findById(productId);
+
+    if (!product) {
+      complete = Common.failedAction;
+      Common.customLog(req, 'deleteProduct', 'product not exits.');
+    } else {
+      // detete product
+      let result = await ProductModel.findByIdAndRemove(productId);
+      Common.customLog(req, 'deleteProduct', 'delete product', productId, result);
+    }
+
+    // render list again
+    res.render(Common.PRODUCT_DELETE_PATH_RENDER, {
+      title: Common.PRODUCT_DELETE_TITLE,
+      completed: complete
+    });
+
+  } catch (err) {
+    Common.renderError(
+      req,
+      res,
+      err,
+      Common.PRODUCT_DELETE_PATH_RENDER,
+      Common.PRODUCT_DELETE_TITLE
     );
   }
 }

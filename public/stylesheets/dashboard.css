@@ -157,7 +157,7 @@ body {
 }
 
 .thumbnail img {
-    max-height: 150px;
+    height: 150px;
 }
 
 .thumbnail .description {
@@ -166,8 +166,14 @@ body {
 
 .price {
     font-weight: bold;
-    font-size: 16px;
+    font-size: 20px;
     color: #9D0D0D;
+}
+
+.price-old {
+  font-weight: bold;
+  font-size: 16px;
+  color: #7f7f7f;
 }
 
 .item.list-group-item
@@ -245,4 +251,14 @@ body {
 }
 /*
 * END DASHBOARD SEARCH PRODUCT: product/index
+*/
+
+/*
+* ERROR PAGE
+*/
+.error-template {padding: 40px 15px;text-align: center;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }
+/*
+* ERROR PAGE
 */

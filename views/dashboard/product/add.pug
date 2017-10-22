@@ -13,12 +13,17 @@ block content
         label.col-lg-2(for="title") Tên sản phẩm
         div.col-lg-4
           input#title.form-control(name="title" 
-            placeholder="Tên sản phẩm" autocomplete="off" value!=product.title)
+            placeholder="Tên sản phẩm" autocomplete="off" 
+            min="10" max="100" value!=product.title)
       div.col-lg-12.form-group
         label.col-lg-2(for="imagePath") Link image
-        div.col-lg-4
+        button.btn.btn-primary#btnAddImage Thêm ảnh
+          | 
+          i.fa.fa-plus-square
+        div.col-lg-4#imageInput
           input#imagePath.form-control(name="imagePath" 
             placeholder="Link hình ảnh sản phẩm" value!=product.imagePath)
+        
       div.col-lg-12.form-group
         label.col-lg-2(for="category") Loại sản phẩm
         div.col-lg-4
@@ -34,7 +39,7 @@ block content
       div.col-lg-12.form-group
         label.col-lg-2(for="description") Mô tả sản phẩm
         div.col-lg-4
-          textarea#description.form-control(name="description" rows="10") !{product.description}
+          textarea#description.form-control(name="description" rows="10" min="10") !{product.description}
       div.col-lg-12.form-group
         label.col-lg-2(for="amount") Số lượng
         div.col-lg-4

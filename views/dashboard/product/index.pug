@@ -3,9 +3,7 @@ extends ../layout
 block content
   h1.page-header= title
 
-  // show status of last screen
-  if completed && completed.success
-    div.alert.alert-success #{completed.message}
+  include ../include/status
 
   // form search
   div.row
@@ -39,24 +37,56 @@ block content
           div.listOrGrid.item.col-sm-6.col-md-4
             div.thumbnail
               img.group.list-group-image.img-response(src=product.imagePath alt="")
+              div.tags
+                h4
+                  span.label.label-primary #{product.category.name}
+                  | 
+                  span.label.label-primary(data-toggle="tooltip"
+                    data-original-title="Lượt xem")
+                    i.fa.fa-eye
+                    | 
+                    = product.views
               div.caption
-                h3.title !{product.title}
+                h4.title !{product.title}
                 h4.group.inner.list-group-item-heading !{product.name}
                 //- p.group.inner.list-group-item-text.description !{product.descriptionDisplay}
                 div.row
-                  div.col-sm-4.col-md-4
-                    p.lead.price !{product.price}
-                  div.col-sm-8.col-md-8
+                  - let idModal = 'modalDelete_' + product.id
+                  div.col-sm-12.col-md-6
+                    if product.priceSale
+                      s.lead.price-old !{product.price}
+                      | 
+                      span.lead.price !{product.priceSale}
+                    else
+                      span.lead.price !{product.price}
+                  div.col-sm-12.col-md-6
                     //- a.btn.btn-success(href="/#") Chi tiết
-                    a.btn.btn-sm.btn-warning(data-toggle="tooltip"
+                    a.btn.btn-sm.btn-default(data-toggle="tooltip"
                       data-original-title="Chỉnh sửa" href=product.urlUpdate) Sửa 
                       | 
                       i.glyphicon.glyphicon-edit
                     span 
-                    a.btn.btn-sm.btn-danger(data-toggle="tooltip"
-                      data-original-title="Xóa" href=product.urlDelete) Xóa 
+                    - let dataTarget = '#' + idModal
+                    button.btn.btn-sm.btn-warning(data-toggle="modal"
+                      data-target=dataTarget) Xóa 
                       |
                       i.glyphicon.glyphicon-remove
+                  // modal delete
+                  div.modal.fade(id=idModal role="dialog")
+                    div.modal-dialog
+
+                      // modal content
+                      div.modal-content
+                        div.modal-header
+                          button.close(type="button" data-dismiss="modal") &times;
+                          h4.modal-title Bạn muốn xóa sản phẩm này
+                        div.modal-body
+                          div.row.text-center
+                            img.group.list-group-image.img-response(src=product.imagePath alt="")
+                            h4 #{product.title}
+                        div.modal-footer
+                          button.btn.btn-primary(type="button" data-dismiss="modal") Cancel
+                          a.btn.btn-danger(href=product.urlDelete) OK
       include ../include/pagging 
   else
     div.alert.alert-warning Không tồn tại sản phẩm nào

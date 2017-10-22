@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const CommonController = require('../controllers/CommonController');
 const CategoryController = require('../controllers/CategoryController');
 const ProductController = require('../controllers/ProductController');
 const CategoryService = require('../services/CategoryService');
@@ -34,7 +35,7 @@ router.get('/categories', CategoryService.getCategories);
  * validate category and get category details
  */
 router.get('/category/:categoryId/update',
-  CategoryController.validateCategoryId,
+  CommonController.validateObjectId,
   CategoryService.updateCategoryGet
 );
 
@@ -44,7 +45,7 @@ router.get('/category/:categoryId/update',
  * validate and update category
  */
 router.post('/category/:categoryId/update',
-  CategoryController.validateCategoryId,
+  CommonController.validateObjectId,
   CategoryController.validateUpdatePost,
   CategoryService.updateCategoryPost
 );
@@ -82,6 +83,14 @@ router.post('/product/add',
   CategoryService.getCategoryName,
   ProductController.validateAddPost,
   ProductService.addProduct
+);
+
+/**
+ * DELETE PRODUCT
+ */
+router.get('/product/:productId/delete',
+  CommonController.validateObjectId,
+  ProductService.deleteProduct
 );
 
 /**

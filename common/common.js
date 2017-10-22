@@ -17,6 +17,8 @@ exports.PRODUCT_PATH_RENDER = 'dashboard/product/index';
 exports.PRODUCT_TITLE = 'Danh sách sản phẩm';
 exports.PRODUCT_ADD_PATH_RENDER = 'dashboard/product/add';
 exports.PRODUCT_ADD_TITLE = 'Thêm mới sản phẩm';
+exports.PRODUCT_DELETE_PATH_RENDER = 'dashboard/product/delete';
+exports.PRODUCT_DELETE_TITLE = 'Xóa sản phẩm';
 
 // record per page products
 exports.DEFAULT_RECORD_PER_PAGE = 6;
@@ -31,6 +33,18 @@ exports.updateSuccess = {
 exports.insertSuccess = {
   success: true,
   message: 'Insert thành công'
+}
+
+// status sucess delete
+exports.deleteSuccess = {
+  success: true,
+  message: 'Đã xóa'
+}
+
+// status sucess delete
+exports.failedAction = {
+  success: false,
+  message: 'Id không tồn tại'
 }
 
 /**
@@ -75,6 +89,10 @@ function renderError(req, res, err, pathRender, title, dataError) {
   if (!err || (err.constructor !== Array && !err.msg)) {
     customLog(null, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ', err);
     errors.push(createObjError('Chúng tôi rất đông đúc. <br/> Vui lòng quay lại sau.'));
+    var completed = {
+      success: false,
+      message: 'Chúng tôi rất đông đúc. Vui lòng quay lại sau.'
+    };
     customLog(null, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
   } else {
     for (let i = 0; i < err.length; i++) {
@@ -83,6 +101,10 @@ function renderError(req, res, err, pathRender, title, dataError) {
       } else {
         customLog(req, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
         errors.push(createObjError('Undefined message error.'));
+        var completed = {
+          success: false,
+          message: 'Undefined message error.'
+        };
         customLog(req, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
       }
       break;
@@ -99,7 +121,8 @@ function renderError(req, res, err, pathRender, title, dataError) {
     res.render(pathRender, {
       title: title,
       errorMessage: errors,
-      dataError: dataError
+      dataError: dataError,
+      completed: completed || {}
     });
   } else {
     // log error for api
@@ -169,11 +192,11 @@ exports.santizeItem = (req, item) => {
  * validate object id of mongo
  */
 function isValidObjectId(id) {
-  if (!id) {
-    return false;
-  }
+  // if (!id) {
+  //   return false;
+  // }
 
-  if (id.match(/^[0-9a-fA-F]{24}$/)) {
+  if (id && id.match(/^[0-9a-fA-F]{24}$/)) {
     // Yes, it's a valid ObjectId, proceed with `findById` call.
     return true;
   }
@@ -281,6 +304,29 @@ function createUrlPagination(req) {
   return qs.stringify(params);
 }
 
+/**
+ * Create image object
+ * @param {request} req 
+ */
+function createImageObject(req) {
+  let image = [];
+
+  // if request 1 image
+  if (req.body.imagePath && typeof req.body.imagePath === 'string') {
+    let imgObj = {};
+    imgObj.pathImage = req.body.imagePath;
+    image.push(imgObj);
+  } else if (req.body.imagePath.length > 0) {
+    for (let i = 0; i < req.body.imagePath.length; i++) {
+      let imgObj = {};
+      imgObj.pathImage = req.body.imagePath[i];
+      image.push(imgObj);
+    }
+  }
+
+  return image;
+}
+
 exports.customLog = customLog;
 
 exports.isDashboardRote = isDashboardRote;
@@ -291,10 +337,12 @@ exports.isValidObjectId = isValidObjectId;
 
 exports.createObjError = createObjError;
 
-exports.cutCharacter = cutCharacter
+exports.cutCharacter = cutCharacter;
 
-exports.calculatePagging = calculatePagging
+exports.calculatePagging = calculatePagging;
 
-exports.createUrlPagination = createUrlPagination
+exports.createUrlPagination = createUrlPagination;
 
-exports.isEmpty = isEmpty
+exports.isEmpty = isEmpty;
+
+exports.createImageObject = createImageObject;

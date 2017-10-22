@@ -1,31 +1,31 @@
 const config = require('../config/config');
 const Common = require('../common/common');
 
-/**
- * validate category id
- */
-exports.validateCategoryId = function (req, res, next) {
+// /**
+//  * validate category id
+//  */
+// exports.validateCategoryId = function (req, res, next) {
 
-  // get parameter
-  let categoryId = req.params.categoryId;
+//   // get parameter
+//   let categoryId = req.params.categoryId;
 
-  // validate category id
-  if (!Common.isValidObjectId(categoryId)) {
-    // define error
-    let error = Common.createObjError('', 'Category', false);
+//   // validate category id
+//   if (!Common.isValidObjectId(categoryId)) {
+//     // define error
+//     let error = Common.createObjError('', 'Category', false);
 
-    // render screen error
-    Common.renderError(
-      req,
-      res,
-      error,
-      Common.CATEGORY_PATH_RENDER,
-      Common.CATEGORY_TITLE
-    );
-  } else {
-    next();
-  }
-}
+//     // render screen error
+//     Common.renderError(
+//       req,
+//       res,
+//       error,
+//       Common.CATEGORY_PATH_RENDER,
+//       Common.CATEGORY_TITLE
+//     );
+//   } else {
+//     next();
+//   }
+// }
 
 /**
  * validate when post update category

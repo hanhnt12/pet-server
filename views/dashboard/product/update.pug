@@ -1,0 +1,62 @@
+extends ../layout
+
+block content
+  h1.page-header= title
+
+  // show error message
+  include ../../includes/error_message
+  
+  if product || dataError
+    if dataError
+      - product = dataError
+    form.form-horizontal(action='' method="POST")
+      fieldset
+        div.col-lg-12.form-group
+          label.col-lg-2(for="title") Tên sản phẩm
+          div.col-lg-4
+            input#title.form-control(name="title" 
+              placeholder="Tên sản phẩm" autocomplete="off" 
+              min="10" max="100" value!=product.title)
+        div.col-lg-12.form-group
+          label.col-lg-2(for="imagePath") Link image
+          button.btn.btn-primary#btnAddImage Thêm ảnh
+            | 
+            i.fa.fa-plus-square
+          div.col-lg-4#imageInput
+            input#imagePath.form-control(name="imagePath" 
+              placeholder="Link hình ảnh sản phẩm" value!=product.imagePath)
+          
+        div.col-lg-12.form-group
+          label.col-lg-2(for="category") Loại sản phẩm
+          div.col-lg-4
+            if categories && categories.length > 0 || dataError && dataError.categories
+              if dataError && dataError.categories
+                - categories = dataError.categories
+              select#category.form-control(name="category")
+                option(value="") -Chọn loại sản phẩm-
+                  each category in categories
+                    - let value = category._id + ',' + category.name
+                    - let selected = product.category && product.category._id == category._id
+                    option(value=value selected=selected) !{category.name}
+        div.col-lg-12.form-group
+          label.col-lg-2(for="description") Mô tả sản phẩm
+          div.col-lg-4
+            textarea#description.form-control(name="description" rows="10" min="10") !{product.description}
+        div.col-lg-12.form-group
+          label.col-lg-2(for="amount") Số lượng
+          div.col-lg-4
+            input#amount.form-control(name="amount" 
+              type="number" min="0" value!=product.amount)
+        div.col-lg-12.form-group
+          label.col-lg-2(for="price") Giá bán
+          div.col-lg-4
+            input#price.form-control(name="price" 
+              type="number" min="0" value!=product.price)
+        div.col-lg-12.form-group
+          label.col-lg-2(for="priceSale") Giá bán (giảm giá)
+          div.col-lg-4
+            input#priceSale.form-control(name="priceSale" 
+              type="number" min="0" value!=product.priceSale)
+        div.col-lg-12.form-group
+          div.col-md-4
+            button#add-product-btn.btn.btn-warning(type='submit') Update

@@ -41,4 +41,14 @@ $(document).ready(function () {
         $("#imagePath").clone().removeAttr('id').appendTo("#imageInput");
         return false;
     })
+
+    // get item error
+    var itemNameError = $('input[type="hidden"][name="err_item"]').val();
+    // highlight and focus to item error
+    if (itemNameError) {
+        var itemError = '[name="' + itemNameError + '"]';
+        $(itemError).addClass('errorInput');
+        $(itemError).focus();
+    }
+    
 });

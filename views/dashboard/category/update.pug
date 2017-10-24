@@ -6,10 +6,6 @@ block content
   // show error message
   include ../../includes/error_message
 
-  // show status update
-  if completed && completed.success
-    div.alert.alert-success #{completed.message}
-
   if category || dataError
     if dataError
       - category = dataError
@@ -46,6 +42,6 @@ block content
         div.col-sm-2
         div.col-sm-10
           input.btn.btn-warning(type="submit" value="Update")
-  else
-    div.alert.alert-warning Không tồn tại category
+  //- else
+  //-   div.alert.alert-warning Không tồn tại category
     

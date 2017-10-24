@@ -112,23 +112,47 @@ exports.getProductsByCategory = async function (req, res, next) {
   }
 }
 
-// get list product details
+/**
+ * Get product information by product id
+ */
 exports.getProduct = async function (req, res, next) {
-  console.log('get details product');
   try {
     // get category name from request
     let productId = req.params.productId;
-    console.log(`product id: ${productId}`);
 
     let product = await getProduct(productId);
 
-    console.log(product);
+    if (Common.isDashboardRote(req)) {
+      // if can not get category
+      if (!product) {
+        let error = Common.createObjError('', 'Sản phẩm');
 
-    // output json
-    res.json(product);
+        // render error
+        Common.renderError(
+          req,
+          res,
+          error,
+          Common.PRODUCT_UPDATE_PATH_RENDER,
+          Common.PRODUCT_UPDATE_TITLE
+        );
+      } else {
+        res.render(Common.PRODUCT_UPDATE_PATH_RENDER, {
+          title: Common.PRODUCT_UPDATE_TITLE,
+          product: product
+        });
+      }
+    } else {
+      // output json
+      res.json(product);
+    }
   } catch (error) {
-    console.log(err);
-    res.json(config.commonError);
+    Common.renderError(
+      req,
+      res,
+      error,
+      Common.PRODUCT_UPDATE_PATH_RENDER,
+      Common.PRODUCT_UPDATE_TITLE
+    );
   }
 }
 

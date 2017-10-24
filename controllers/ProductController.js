@@ -51,6 +51,7 @@ exports.validateAddPost = function (req, res, next) {
   // validate data
   Common.checkBodyRequestLength(req, 'title', 10, 100);
   Common.checkBodyRequestLength(req, 'description', 10, 4000);
+  // Common.checkBodyRequestNumber(req, 'category');
   // Common.checkBodyRequestNumber(req, 'amount');
   // Common.checkBodyRequestNumber(req, 'price');
   // Common.checkBodyRequestNumber(req, 'priceSale');
@@ -62,13 +63,15 @@ exports.validateAddPost = function (req, res, next) {
   // validate error
   let errors = req.validationErrors() || [];
 
-  // validate category
+  // validate category exist in master
   let category = validateCategory(req);
 
   // if have error when validate
   // push to error common
   if (!category) {
-    errors.push(Common.createObjError(null, 'Loại sản phẩm'))
+    let error = Common.createObjError(null, 'Loại sản phẩm');
+    error["param"] = 'category';
+    errors.push(error);
   }
 
   let images = Common.createImageObject(req);
@@ -84,8 +87,6 @@ exports.validateAddPost = function (req, res, next) {
     priceSale: req.body.priceSale,
     categories: req.categories
   };
-
-  Common.customLog(req,'validateAddPost: ', product);
 
   // when validate have error
   if (errors && errors.length > 0) {

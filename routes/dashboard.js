@@ -86,6 +86,28 @@ router.post('/product/add',
 );
 
 /**
+ * update product
+ * path: /dashboard/product/update
+ * update product get
+ */
+router.get('/product/:productId/update',
+  CommonController.validateObjectId,
+  CategoryService.getCategoryName,
+  ProductService.getProduct
+);
+
+/**
+* Add new products
+* path: /dashboard/product/add
+* update product post
+*/
+router.post('/product/:productId/update',
+  CategoryService.getCategoryName,
+  ProductController.validateAddPost,
+  ProductService.getProduct
+);
+
+/**
  * DELETE PRODUCT
  */
 router.get('/product/:productId/delete',

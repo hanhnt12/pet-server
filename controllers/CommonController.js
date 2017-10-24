@@ -6,6 +6,10 @@ const Common = require('../common/common');
  */
 exports.validateObjectId = function (req, res, next) {
 
+  // santize
+  Common.santizeItem('categoryId');
+  Common.santizeItem('productId');
+
   // get parameter
   let categoryId = req.params.categoryId;
   let productId = req.params.productId;
@@ -24,8 +28,8 @@ exports.validateObjectId = function (req, res, next) {
     let pathTitle = Common.DASHBOARD_TITLE;
 
     if (req.originalUrl.indexOf('product') > 0) {
-      pathRender = Common.PRODUCT_PATH_RENDER;
-      pathTitle = Common.PRODUCT_TITLE;
+      pathRender = Common.PRODUCT_UPDATE_PATH_RENDER;
+      pathTitle = Common.PRODUCT_UPDATE_TITLE;
     } else if (req.originalUrl.indexOf('categor') > 0) {
       pathRender = Common.CATEGORY_PATH_RENDER_UPDATE;
       pathTitle = Common.CATEGORY_TITLE_UPDATE;

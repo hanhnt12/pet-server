@@ -90,10 +90,6 @@ exports.getCategories = async function (req, res) {
  */
 exports.updateCategoryGet = async function (req, res, next) {
   try {
-    // santize
-    req.sanitize('categoryId').escape();
-    req.sanitize('categoryId').trim();
-
     // get category id
     let categoryId = req.params.categoryId
 
@@ -103,11 +99,17 @@ exports.updateCategoryGet = async function (req, res, next) {
 
     // if can not get category
     if (!category) {
-      let error = Common.createObjError('', 'Category', false);
-      res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
-        title: Common.CATEGORY_TITLE_UPDATE,
-        errorMessage: error
-      });
+      // create error object
+      let error = Common.createObjError('', 'Category');
+
+      // render error
+      Common.renderError(
+        req,
+        res,
+        error,
+        Common.CATEGORY_PATH_RENDER_UPDATE,
+        Common.CATEGORY_TITLE_UPDATE
+      );
     } else {
       res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
         title: Common.CATEGORY_TITLE_UPDATE,

@@ -12,6 +12,6 @@ module.exports = {
   // default message error
   commonError: {
     success: false,
-    message: 'Chúng tôi rất đông đúc. <br />Vui lòng quay lại sau.'
+    msg: 'Chúng tôi rất đông đúc. <br />Vui lòng quay lại sau.'
   }
 }

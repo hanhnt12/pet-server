@@ -19,6 +19,8 @@ exports.PRODUCT_ADD_PATH_RENDER = 'dashboard/product/add';
 exports.PRODUCT_ADD_TITLE = 'Thêm mới sản phẩm';
 exports.PRODUCT_DELETE_PATH_RENDER = 'dashboard/product/delete';
 exports.PRODUCT_DELETE_TITLE = 'Xóa sản phẩm';
+exports.PRODUCT_UPDATE_PATH_RENDER = 'dashboard/product/update';
+exports.PRODUCT_UPDATE_TITLE = 'Update sản phẩm';
 
 // record per page products
 exports.DEFAULT_RECORD_PER_PAGE = 6;
@@ -84,45 +86,43 @@ function renderError(req, res, err, pathRender, title, dataError) {
 
   var errors = [];
 
+  // if error is object have msg property
+  if (err && err.msg) {
+    errors.push(err);
+  }
+
   // if error can not handler
   // only display first error by break in for loop
   if (!err || (err.constructor !== Array && !err.msg)) {
     customLog(null, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ', err);
     errors.push(createObjError('Chúng tôi rất đông đúc. <br/> Vui lòng quay lại sau.'));
-    var completed = {
-      success: false,
-      message: 'Chúng tôi rất đông đúc. Vui lòng quay lại sau.'
-    };
     customLog(null, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
   } else {
     for (let i = 0; i < err.length; i++) {
+      // only display the first error
       if (err[i].msg) {
-        errors.push(createObjError(err[i].msg));
+        errors.push(err[i]);
       } else {
         customLog(req, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
         errors.push(createObjError('Undefined message error.'));
-        var completed = {
-          success: false,
-          message: 'Undefined message error.'
-        };
         customLog(req, 'renderError', '++++++++++++++++++++++++FATAL ERROR++++++++++++++++++++++++ ');
       }
       break;
     }
+    // errors = err;
   }
 
   // set default title
   if (!title) {
-    title = config.commonError.message;
+    title = 'Error';
   }
 
   // when fron dashboar route
   if (isDashboardRote(req)) {
     res.render(pathRender, {
       title: title,
-      errorMessage: errors,
-      dataError: dataError,
-      completed: completed || {}
+      errors: errors,
+      dataError: dataError
     });
   } else {
     // log error for api

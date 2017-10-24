@@ -240,7 +240,14 @@ exports.addProduct = async function (req, res, next) {
     let result = await product.save();
 
     // render screen
-    res.redirect('/dashboard/products');
+    // res.redirect('/dashboard/products');
+    // render again
+    let complete = Common.insertSuccess;
+    complete['action'] = '/dashboard/products';
+    res.render(Common.PRODUCT_ADD_PATH_RENDER, {
+      title: Common.PRODUCT_ADD_TITLE,
+      completed: complete,
+    });
 
   } catch (err) {
     Common.renderError(

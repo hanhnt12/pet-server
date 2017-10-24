@@ -6,6 +6,28 @@ if errors && errors.length > 0
     if error.param
       input(type="hidden" name="err_item" value=error.param)
 else
-  // show status update
-  if completed && completed.success
-    div.alert.alert-success #{completed.message}
+  // show status of last screen
+  if completed
+    //- div.alert.alert-success #{completed.message}
+
+    if completed.success
+      - var title = "Resopne ok"
+    else
+      - var title = "Có lỗi xảy ra"
+
+    // modal delete
+    div#statusModal.modal.fade(role="dialog")
+      div.modal-dialog.modal-sm
+
+        // modal content
+        div.modal-content
+          div.modal-header
+            button.close(type="button" data-dismiss="modal") &times;
+            h4.modal-title= title
+          div.modal-body
+            p #{completed.message}
+          div.modal-footer
+            if completed.action
+              a.btn.btn-default(href=completed.action) OK
+            else
+              button.btn.btn-default(type="button" data-dismiss="modal") OK

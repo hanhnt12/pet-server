@@ -180,13 +180,11 @@ exports.searchProduct = async function (req, res, next) {
 
     // check route to display
     if (Common.isDashboardRote(req)) {
-      // res.locals.createUrlPagination = Common.createUrlPagination;
       res.render(Common.PRODUCT_PATH_RENDER, {
         title: Common.PRODUCT_TITLE,
         products: products,
         q: productTitle,
         page: page,
-        pageSize: Common.DEFAULT_RECORD_PER_PAGE,
         totalPage: totalPage,
         url: Common.createUrlPagination(req)
       });

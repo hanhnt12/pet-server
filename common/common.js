@@ -295,7 +295,7 @@ function createUrlPagination(req) {
 
   delete params.page
 
-  console.log(null, 'createUrlPagination', params, req.url, qs.stringify(params));
+  customLog(null, 'createUrlPagination', params, req.url, qs.stringify(params));
 
   if (isEmpty(params)) {
     return '';

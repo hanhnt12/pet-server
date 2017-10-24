@@ -20,15 +20,16 @@ block content
   // display list
   if products && products.length > 0
     div.well.well-sm
-      strong #{title} 
-        div.btn-group
-          a(href="#" id="list" click="changeToList()" class="btn btn-default btn-sm")
-            span.glyphicon.glyphicon-th-list
-            span List 
-          span
-          a(href="#" id="grid" click="changeToGrid()" class="btn btn-default btn-sm")
-            span.glyphicon.glyphicon-th Grid 
-        </div>
+      strong Xem danh sách
+      |  
+      div.btn-group
+        a(href="#" id="list" click="changeToList()" class="btn btn-default btn-sm")
+          span.glyphicon.glyphicon-th-list
+          span  List 
+        span
+        a(href="#" id="grid" click="changeToGrid()" class="btn btn-default btn-sm")
+          span.glyphicon.glyphicon-th  Grid 
+      </div>
 
       include ../include/pagging
 

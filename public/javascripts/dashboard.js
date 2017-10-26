@@ -37,10 +37,47 @@ $(document).ready(function () {
         $('#statusModal').modal('show');
     });
 
+    // add image when update product
+    let imageGroupInput = $('#imageGroupInput');
+    // max append 5 image
+    var maxAppend = $('.imageGroupInput').size();
     $('#btnAddImage').on('click', function () {
-        $("#imagePath").clone().removeAttr('id').appendTo("#imageInput");
+        // if is not max append then add
+        if (maxAppend++ < 5) {
+            imageGroupInput.clone().removeAttr('id').appendTo("#imageGroup");
+        } else {
+            $('#imagePreview').attr('src', '');
+            $('#modalContent').text('Chỉ được nhập tối đa 5 hình ảnh.');
+            $('#imageModal').modal('show');
+        }
         return false;
-    })
+    });
+
+    // remove image when udpate product
+    $('.btnRemove').on('click', function() {
+        if (maxAppend > 1) {
+            $(this).closest('.imageGroupInput').remove();
+            // decrease max append
+            maxAppend--;
+        } else {
+            $('#imagePreview').attr('src', '');
+            $('#modalContent').text('Phải có ít nhất 1 hình ảnh.');
+            $('#imageModal').modal('show');
+        }
+        
+        return false;
+    });
+
+    // preview image when udpate product
+    $('.btnPreview').on('click', function() {
+        var src = $(this).closest('.imageGroupInput').find('[name="imagePath"]').val();
+        if (src) {
+            $('#modalContent').text('');
+            $('#imagePreview').attr('src', src);
+            $('#imageModal').modal('show');
+        }
+        return false;
+    });
 
     // get item error
     var itemNameError = $('input[type="hidden"][name="err_item"]').val();

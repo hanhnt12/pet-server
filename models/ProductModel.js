@@ -7,7 +7,7 @@ let schema = new Schema({
   image: [
     {
       pathImage: { type: String, required: true, min: 10 },
-      defaultImage: { type: Boolean, default: true }
+      defaultImage: { type: Boolean, default: false }
     }
   ],
   category: {

@@ -102,9 +102,10 @@ router.get('/product/:productId/update',
 * update product post
 */
 router.post('/product/:productId/update',
+  CommonController.validateObjectId,
   CategoryService.getCategoryName,
   ProductController.validateAddPost,
-  ProductService.getProduct
+  ProductService.updateProduct
 );
 
 /**

@@ -52,9 +52,9 @@ exports.validateAddPost = function (req, res, next) {
   Common.checkBodyRequestLength(req, 'title', 10, 100);
   Common.checkBodyRequestLength(req, 'description', 10, 4000);
   // Common.checkBodyRequestNumber(req, 'category');
-  // Common.checkBodyRequestNumber(req, 'amount');
-  // Common.checkBodyRequestNumber(req, 'price');
-  // Common.checkBodyRequestNumber(req, 'priceSale');
+  Common.checkBodyRequestNumber(req, 'amount');
+  Common.checkBodyRequestNumber(req, 'price');
+  Common.checkBodyRequestNumber(req, 'priceSale');
 
   // santize
   Common.santizeItem(req, 'title');
@@ -85,22 +85,33 @@ exports.validateAddPost = function (req, res, next) {
     amount: req.body.amount,
     price: req.body.price,
     priceSale: req.body.priceSale,
-    categories: req.categories
+    _id: req.params.productId
   };
 
   // when validate have error
   if (errors && errors.length > 0) {
 
+    // add category to return 
+    product.categories = req.categories
+
     // log error
     Common.customLog(req, 'validateAddPost', 'error', errors);
+
+    let pathRender = Common.PRODUCT_ADD_PATH_RENDER;
+    let pathTitle = Common.PRODUCT_ADD_TITLE;
+
+    if (req.originalUrl.indexOf('update') > 0) {
+      pathRender = Common.PRODUCT_UPDATE_PATH_RENDER;
+      pathTitle = Common.PRODUCT_UPDATE_TITLE;
+    }
 
     // render screen error
     Common.renderError(
       req,
       res,
       errors,
-      Common.PRODUCT_ADD_PATH_RENDER,
-      Common.PRODUCT_ADD_TITLE,
+      pathRender,
+      pathTitle,
       product
     );
   } else {

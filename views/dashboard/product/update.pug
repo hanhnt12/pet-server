@@ -18,14 +18,33 @@ block content
               placeholder="Tên sản phẩm" autocomplete="off" 
               min="10" max="100" value!=product.title)
         div.col-lg-12.form-group
-          label.col-lg-2(for="imagePath") Link image
-          button.btn.btn-primary#btnAddImage Thêm ảnh
-            | 
-            i.fa.fa-plus-square
-          div.col-lg-4#imageInput
-            input#imagePath.form-control(name="imagePath" 
-              placeholder="Link hình ảnh sản phẩm" value!=product.imagePath)
-          
+            div.col-lg-2
+              label.col-lg-12(for="imagePath") Link image
+              br
+              br
+              button.btn.btn-primary#btnAddImage Thêm ảnh
+                | 
+                i.fa.fa-plus-square
+            div.col-lg-10#imageGroup
+              include ../include/modalImg
+              each img in product.image
+                div.form-group.imageGroupInput#imageGroupInput
+                  div.col-md-8
+                    input#imagePath.form-control(name="imagePath" 
+                      placeholder="Link hình ảnh sản phẩm" value!=img.pathImage)
+                  div.col-md-2
+                    label
+                      input#defaultImage(type="radio" name="defaultImage" value=img.defaultImage)
+                      | Default
+                  div.col-md-2
+                    button.btn.btn-sm.btn-danger.btnRemove(data-toggle="tooltip"
+                      data-original-title="Xóa ảnh này")
+                      i.fa.fa-times
+                    | 
+                    button.btn.btn-sm.btn-primary.btnPreview(data-toggle="tooltip"
+                      data-original-title="Preview")
+                      i.fa.fa-search
+
         div.col-lg-12.form-group
           label.col-lg-2(for="category") Loại sản phẩm
           div.col-lg-4
@@ -36,7 +55,7 @@ block content
                 option(value="") -Chọn loại sản phẩm-
                   each category in categories
                     - let value = category._id + ',' + category.name
-                    - let selected = product.category && product.category._id == category._id
+                    - let selected = product.category && (product.category._id === category._id || product.category.name === category.name)
                     option(value=value selected=selected) !{category.name}
         div.col-lg-12.form-group
           label.col-lg-2(for="description") Mô tả sản phẩm

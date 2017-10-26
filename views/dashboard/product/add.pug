@@ -34,7 +34,7 @@ block content
               option(value="") -Chọn loại sản phẩm-
                 each category in categories
                   - let value = category._id + ',' + category.name
-                  - let selected = product.category && product.category._id == category._id
+                  - let selected = product.category && (product.category._id === category._id || product.category.name === category.name)
                   option(value=value selected=selected) !{category.name}
       div.col-lg-12.form-group
         label.col-lg-2(for="description") Mô tả sản phẩm

@@ -42,10 +42,8 @@ async function countProducts(query = {}, projection = '_id') {
 // common function get product details
 async function getProduct(productId) {
   // get list products
-  console.log('before');
   let product = await ProductModel.findById(productId);
-  console.log(product);
-  console.log('after');
+  Common.customLog(null, 'Get product information: ', product);
   return product;
 }
 
@@ -138,7 +136,8 @@ exports.getProduct = async function (req, res, next) {
       } else {
         res.render(Common.PRODUCT_UPDATE_PATH_RENDER, {
           title: Common.PRODUCT_UPDATE_TITLE,
-          product: product
+          product: product,
+          categories: req.categories
         });
       }
     } else {
@@ -261,6 +260,44 @@ exports.addProduct = async function (req, res, next) {
       }
     );
   }
+}
+
+/**
+ * Update product information
+ */
+exports.updateProduct = function (req, res, next) {
+
+  // get product from validate ok
+  let productUpdate = new ProductModel(req.product);
+
+  Common.customLog(req, 'product update', productUpdate);
+
+  // save product
+  ProductModel.findByIdAndUpdate(productUpdate._id, productUpdate, {}, function (err, product) {
+    Common.customLog(req, 'product findByIdAndUpdate', product);
+    if (err) {
+      Common.renderError(
+        req,
+        res,
+        err,
+        Common.PRODUCT_UPDATE_PATH_RENDER,
+        Common.PRODUCT_UPDATE_TITLE,
+        {
+          categories: req.categories
+        }
+      );
+    } else {
+      Common.customLog(req, 'product findByIdAndUpdate ok', product);
+      let complete = Common.updateSuccess;
+      complete['action'] = '/dashboard/products';
+      res.render(Common.PRODUCT_PATH_RENDER, {
+        title: Common.PRODUCT_TITLE,
+        completed: complete,
+      });
+    }
+  });
+
+  Common.customLog(req, 'product update end', productUpdate);
 }
 
 /**

@@ -157,7 +157,9 @@ body {
 }
 
 .thumbnail img {
-    height: 150px;
+  width: 100%;
+  height: auto;
+  max-height: 150px;
 }
 
 .thumbnail .description {

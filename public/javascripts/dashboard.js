@@ -30,8 +30,13 @@ $(document).ready(function () {
 
 /// product list index
 $(document).ready(function () {
-    $('#list').click(function (event) { event.preventDefault(); $('#products .item').addClass('list-group-item'); });
-    $('#grid').click(function (event) { event.preventDefault(); $('#products .item').removeClass('list-group-item'); $('#products .item').addClass('grid-group-item'); });
+    $('#list').click(function (event) {
+        event.preventDefault(); $('#products .item').addClass('list-group-item');
+    });
+    $('#grid').click(function (event) {
+        event.preventDefault(); $('#products .item').removeClass('list-group-item');
+        $('#products .item').addClass('grid-group-item');
+    });
 
     $(window).on('load', function () {
         $('#statusModal').modal('show');
@@ -41,42 +46,64 @@ $(document).ready(function () {
     let imageGroupInput = $('#imageGroupInput');
     // max append 5 image
     var maxAppend = $('.imageGroupInput').size();
-    $('#btnAddImage').on('click', function () {
+    // $(document).on('click', '#btnAddImage', function (event) {
+    $('#btnAddImage').on('click', function (event) {
+        event.preventDefault();
         // if is not max append then add
         if (maxAppend++ < 5) {
-            imageGroupInput.clone().removeAttr('id').appendTo("#imageGroup");
+            // clone image input group
+            var imageGroup = imageGroupInput.clone().removeAttr('id');
+            imageGroup.find('.imagePath').val('');
+            imageGroup.find('[name="defaultImage"]').prop('checked', false);
+            imageGroup.appendTo("#imageGroup");
+            $(this).prop('disabled', false);
+
+            // change value of radio on input group
+            let defaultImg = document.getElementsByClassName('defaultImage');
+            let rdImg = defaultImg.length;
+            defaultImg[rdImg - 1].value = rdImg;
         } else {
             $('#imagePreview').attr('src', '');
             $('#modalContent').text('Chỉ được nhập tối đa 5 hình ảnh.');
             $('#imageModal').modal('show');
+            $(this).prop('disabled', true);
         }
-        return false;
     });
 
     // remove image when udpate product
-    $('.btnRemove').on('click', function() {
+    $(document).on('click', '.btnRemove', function (event) {
+    // $('.btnRemove').on('click', function (event) {
+        event.preventDefault();
+        $('#btnAddImage').prop('disabled', false);
         if (maxAppend > 1) {
             $(this).closest('.imageGroupInput').remove();
             // decrease max append
             maxAppend--;
+            // refresh value of radios follow order
+            let defaultImg = document.getElementsByClassName('defaultImage');
+            let rdImg = defaultImg.length;
+            for (i = 0; i < rdImg; i++) {
+                defaultImg[i].value = i + 1;
+            }
         } else {
             $('#imagePreview').attr('src', '');
             $('#modalContent').text('Phải có ít nhất 1 hình ảnh.');
             $('#imageModal').modal('show');
         }
-        
-        return false;
     });
 
     // preview image when udpate product
-    $('.btnPreview').on('click', function() {
+    $(document).on('click', '.btnPreview', function (event) {
+    // $('.btnPreview').on('click', function (event) {
+        event.preventDefault();
         var src = $(this).closest('.imageGroupInput').find('[name="imagePath"]').val();
         if (src) {
             $('#modalContent').text('');
             $('#imagePreview').attr('src', src);
             $('#imageModal').modal('show');
+        } else {
+            $(this).closest('.imageGroupInput').find('[name="imagePath"]').addClass('errorInput');
         }
-        return false;
     });
 
     // get item error
@@ -87,5 +114,5 @@ $(document).ready(function () {
         $(itemError).addClass('errorInput');
         $(itemError).focus();
     }
-    
+
 });

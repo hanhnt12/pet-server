@@ -314,15 +314,31 @@ function createImageObject(req) {
   // if request 1 image
   if (req.body.imagePath && typeof req.body.imagePath === 'string') {
     let imgObj = {};
-    imgObj.pathImage = req.body.imagePath;
-    image.push(imgObj);
-  } else if (req.body.imagePath.length > 0) {
-    for (let i = 0; i < req.body.imagePath.length; i++) {
-      let imgObj = {};
-      imgObj.pathImage = req.body.imagePath[i];
+    // if exist image path then create image object
+    if (req.body.imagePath) {
+      imgObj.pathImage = req.body.imagePath;
+      imgObj.defaultImage = true;
       image.push(imgObj);
     }
+  } else if (req.body.imagePath.length > 0) {
+    // loop images request
+    for (let i = 0; i < req.body.imagePath.length; i++) {
+      let imgObj = {};
+      // if exist image path then create image object 
+      if (req.body.imagePath[i]) {
+        imgObj.pathImage = req.body.imagePath[i];
+        if (req.body.defaultImage == (i + 1)) {
+          imgObj.defaultImage = true;
+        } else {
+          imgObj.defaultImage = false
+        }
+        image.push(imgObj);
+      }
+    }
+    customLog(null, 'default image', req.body.defaultImage);
   }
+
+  customLog(null, 'create image object', image);
 
   return image;
 }

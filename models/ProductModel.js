@@ -63,8 +63,10 @@ schema
   .virtual('imagePath')
   .get(function () {
     if (this.image && this.image.length > 0) {
-      if (this.image[0].pathImage) {
-        return this.image[0].pathImage;
+      for (let i = 0; i < this.image.length; i++) {
+        if (this.image[i].defaultImage) {
+          return this.image[i].pathImage;
+        }
       }
     }
     return '';

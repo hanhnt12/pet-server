@@ -16,7 +16,7 @@ html(lang='en')
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
     script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
     script(src='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js')
-    
+    script(src='/javascripts/dashboard.js')
   body
 
     div.navbar.navbar-inverse.navbar-fixed-top
@@ -29,18 +29,18 @@ html(lang='en')
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a(class='navbar-brand' href='/dashboard') Project name
+          a(class='navbar-brand' href='/dashboard') Pet Store
         div(id='navbar' class='navbar-collapse collapse')
           ul.nav.navbar-nav.navbar-right
-            li
-              a(href='/dashboard') Dashboard
-            li
-              a(href='/dashboard/settings') Settings
+            //- li
+            //-   a(href='/dashboard') Dashboard
+            //- li
+            //-   a(href='/dashboard/settings') Settings
             if login
               li
                 a(href='/users/logout') Logout
-          form.navbar-form.navbar-right
-            input(class='form-control' placeholder='Search...')
+          //- form.navbar-form.navbar-right
+          //-   input(class='form-control' placeholder='Search...')
 
     div.container-fluid
       div.row
@@ -50,11 +50,14 @@ html(lang='en')
               a(href='/dashboard') Quản lý
                 span.sr-only (current)
             li
-              a(href='#') Reports
-            li
-              a(href='#') Analytics
-            li
-              a(href='#') Export
+              a(href='/') Xem trang
+                span.sr-only (current)
+            //- li
+            //-   a(href='#') Reports
+            //- li
+            //-   a(href='#') Analytics
+            //- li
+            //-   a(href='#') Export
           ul.nav.nav-sidebar
             li
               a(href='/dashboard/products') 
@@ -74,7 +77,14 @@ html(lang='en')
               a(href='/dashboard/category/add') 
                 i.fa.fa-plus
                 |  Add Category
+          ul.nav.nav-sidebar
+            li
+              a(href='/dashboard/users') 
+                i.fa.fa-user
+                |  User
+            li
+              a(href='/dashboard/user/add') 
+                i.fa.fa-user-plus
+                |  Add User
         div.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
           block content
-
-    script(src='/javascripts/dashboard.js')

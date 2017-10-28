@@ -27,14 +27,14 @@ block content
                 i.fa.fa-plus-square
             div.col-lg-10#imageGroup
               include ../include/modalImg
-              each img in product.image
+              each img, index in product.image
                 div.form-group.imageGroupInput#imageGroupInput
                   div.col-md-8
-                    input#imagePath.form-control(name="imagePath" 
+                    input.imagePath.form-control(name="imagePath" 
                       placeholder="Link hình ảnh sản phẩm" value!=img.pathImage)
                   div.col-md-2
                     label
-                      input#defaultImage(type="radio" name="defaultImage" value=img.defaultImage)
+                      input.defaultImage(type="radio" name="defaultImage" checked=img.defaultImage value=index+1)
                       | Default
                   div.col-md-2
                     button.btn.btn-sm.btn-danger.btnRemove(data-toggle="tooltip"
@@ -71,11 +71,15 @@ block content
           div.col-lg-4
             input#price.form-control(name="price" 
               type="number" min="0" value!=product.price)
+          div.col-lg-2
+            b ,000 VND
         div.col-lg-12.form-group
           label.col-lg-2(for="priceSale") Giá bán (giảm giá)
           div.col-lg-4
             input#priceSale.form-control(name="priceSale" 
               type="number" min="0" value!=product.priceSale)
+          div.col-lg-2
+            b ,000 VND
         div.col-lg-12.form-group
           div.col-md-4
             button#add-product-btn.btn.btn-warning(type='submit') Update

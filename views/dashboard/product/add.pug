@@ -50,11 +50,15 @@ block content
         div.col-lg-4
           input#price.form-control(name="price" 
             type="number" min="0" value!=product.price)
+        div.col-lg-4
+          b ,000 VND
       div.col-lg-12.form-group
         label.col-lg-2(for="priceSale") Giá bán (giảm giá)
         div.col-lg-4
           input#priceSale.form-control(name="priceSale" 
             type="number" min="0" value!=product.priceSale)
+        div.col-lg-4
+          b ,000 VND
       div.col-lg-12.form-group
         div.col-md-4
           button#add-product-btn.btn.btn-warning(type='submit') Tạo sản phẩm

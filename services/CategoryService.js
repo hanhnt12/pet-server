@@ -136,13 +136,13 @@ exports.updateCategoryPost = async function (req, res, next) {
     let categoryId = req.params.categoryId
 
     // create object to update
-    let category = new CategoryModel({
+    let category = {
       name: req.body.name,
       title: req.body.title,
       description: req.body.description,
       display: req.body.display === "1",
       _id: categoryId
-    });
+    };
 
     // log value to update
     Common.customLog(req, 'updateCategoryPost', 'value to update', category);

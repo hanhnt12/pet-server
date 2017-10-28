@@ -268,13 +268,12 @@ exports.addProduct = async function (req, res, next) {
 exports.updateProduct = function (req, res, next) {
 
   // get product from validate ok
-  let productUpdate = new ProductModel(req.product);
+  let productUpdate = req.product;
 
   Common.customLog(req, 'product update', productUpdate);
 
   // save product
-  ProductModel.findByIdAndUpdate(productUpdate._id, productUpdate, {}, function (err, product) {
-    Common.customLog(req, 'product findByIdAndUpdate', product);
+  ProductModel.findByIdAndUpdate(productUpdate._id, { $set: productUpdate }, {}, function (err, product) {
     if (err) {
       Common.renderError(
         req,
@@ -287,17 +286,14 @@ exports.updateProduct = function (req, res, next) {
         }
       );
     } else {
-      Common.customLog(req, 'product findByIdAndUpdate ok', product);
       let complete = Common.updateSuccess;
       complete['action'] = '/dashboard/products';
-      res.render(Common.PRODUCT_PATH_RENDER, {
-        title: Common.PRODUCT_TITLE,
+      res.render(Common.PRODUCT_UPDATE_PATH_RENDER, {
+        title: Common.PRODUCT_UPDATE_TITLE,
         completed: complete,
       });
     }
   });
-
-  Common.customLog(req, 'product update end', productUpdate);
 }
 
 /**

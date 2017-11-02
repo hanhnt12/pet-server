@@ -8,10 +8,5 @@ module.exports = {
   },
   headerNameToken: 'xxx-token-access',  // header to store token
   userRoles: ['admin', 'manager', 'client'], // user roles
-  defaultUserRole: 'client', // default user roles when create
-  // default message error
-  commonError: {
-    success: false,
-    msg: 'Chúng tôi rất đông đúc. <br />Vui lòng quay lại sau.'
-  }
+  defaultUserRole: 'client' // default user roles when create
 }

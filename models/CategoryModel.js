@@ -49,4 +49,11 @@ schema
         return 'Không hiển thị'
     });
 
+// status display, non display
+schema
+    .virtual('productCategory')
+    .get(function () {
+        return '/products/' + this.name;
+    });
+
 module.exports = mongoose.model('category', schema);

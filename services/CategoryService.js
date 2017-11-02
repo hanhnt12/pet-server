@@ -62,7 +62,6 @@ exports.getCategories = async function (req, res) {
     let sort = { sort: { displayOrder: 1 } };
     // use model to query db
     let categories = await CategoryModel.find(query, projection, sort);
-    console.log(categories);
 
     if (!dashboardF) {
       // output json
@@ -75,14 +74,14 @@ exports.getCategories = async function (req, res) {
     }
     // Handler error
   } catch (err) {
-    Common.renderError(
-      req,
-      res,
-      err,
-      Common.CATEGORY_PATH_RENDER,
-      Common.CATEGORY_TITLE
-    );
-  }
+      Common.renderError(
+        req,
+        res,
+        err,
+        Common.CATEGORY_PATH_RENDER,
+        Common.CATEGORY_TITLE
+      );
+    }
 }
 
 /**

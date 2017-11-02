@@ -49,6 +49,12 @@ exports.failedAction = {
   message: 'Id không tồn tại'
 }
 
+// default message error
+exports.commonError = {
+  success: false,
+  msg: 'Chúng tôi rất đông đúc. <br />Vui lòng quay lại sau.'
+}
+
 /**
  * write log value
  */
@@ -67,13 +73,13 @@ function customLog(req, ...value) {
  * to distinguish with api route
  */
 function isDashboardRote(req) {
-  // log url
-  customLog(req, 'isDashboardRote', req.originalUrl);
-
   // if url contains dashboard
   if (req.originalUrl.indexOf(DASH_BOARD) > 0) {
+    customLog(req, 'isDashboardRote', req.originalUrl);
     return true;
   }
+
+  customLog(req, 'is api route', req.originalUrl);
 
   return false;
 }

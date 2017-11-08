@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h1.page-header= title
+
+  // show error message
+  include ../includes/error_message
+
+  if contact || dataError
+    if dataError
+      - contact = dataError
+    form.form-horizontal(method="POST")
+      div.form-group
+        label.control-label.col-sm-2(for='phone') Phone:
+        div.col-sm-10
+          input.form-control#name(value=contact.phone name="phone")
+      div.form-group
+        label.control-label.col-sm-2(for='mobile') Mobile:
+        div.col-sm-10
+          input.form-control#title(value!=contact.mobile name="mobile")
+      div.form-group
+        label.control-label.col-sm-2(for='email') Email:
+        div.col-sm-10
+          input.form-control#title(value!=contact.email name="email")
+      input(value!=contact._id name="contactId" type="hidden")
+      div.form-group
+        div.col-sm-2
+        div.col-sm-10
+          input.btn.btn-warning(type="submit" value="Update")
+
+    

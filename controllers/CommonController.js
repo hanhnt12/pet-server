@@ -20,29 +20,34 @@ exports.validateObjectId = function (req, res, next) {
   if (!Common.isValidObjectId(id)) {
 
     Common.customLog(req, 'validateObjectId', 'Id không đúng.');
+    if (Common.isDashboardRote(req)) {
+      // define error
+      let error = Common.createObjError('', 'ID', false);
 
-    // define error
-    let error = Common.createObjError('', 'ID', false);
+      let pathRender = Common.DASHBOARD_PATH_RENDER;
+      let pathTitle = Common.DASHBOARD_TITLE;
 
-    let pathRender = Common.DASHBOARD_PATH_RENDER;
-    let pathTitle = Common.DASHBOARD_TITLE;
+      if (req.originalUrl.indexOf('product') > 0) {
+        pathRender = Common.PRODUCT_UPDATE_PATH_RENDER;
+        pathTitle = Common.PRODUCT_UPDATE_TITLE;
+      } else if (req.originalUrl.indexOf('categor') > 0) {
+        pathRender = Common.CATEGORY_PATH_RENDER_UPDATE;
+        pathTitle = Common.CATEGORY_TITLE_UPDATE;
+      }
 
-    if (req.originalUrl.indexOf('product') > 0) {
-      pathRender = Common.PRODUCT_UPDATE_PATH_RENDER;
-      pathTitle = Common.PRODUCT_UPDATE_TITLE;
-    } else if (req.originalUrl.indexOf('categor') > 0) {
-      pathRender = Common.CATEGORY_PATH_RENDER_UPDATE;
-      pathTitle = Common.CATEGORY_TITLE_UPDATE;
+      // render screen error
+      Common.renderError(
+        req,
+        res,
+        error,
+        pathRender,
+        pathTitle
+      );
+    } else {
+      res.json({
+        error: 'errorID'
+      });
     }
-
-    // render screen error
-    Common.renderError(
-      req,
-      res,
-      error,
-      pathRender,
-      pathTitle
-    );
   } else {
     next();
   }

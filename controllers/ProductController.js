@@ -75,6 +75,7 @@ exports.validateAddPost = function (req, res, next) {
   }
 
   let images = Common.createImageObject(req);
+  let freeItems = Common.createFreeItems(req);
 
   // create object to keep data
   let product = {
@@ -82,6 +83,7 @@ exports.validateAddPost = function (req, res, next) {
     image: images,
     category: category,
     description: req.body.description,
+    freeItems: freeItems,
     amount: req.body.amount,
     price: req.body.price,
     priceSale: req.body.priceSale,

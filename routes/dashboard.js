@@ -3,8 +3,11 @@ var router = express.Router();
 const CommonController = require('../controllers/CommonController');
 const CategoryController = require('../controllers/CategoryController');
 const ProductController = require('../controllers/ProductController');
+const ContactController = require('../controllers/ContactController');
 const CategoryService = require('../services/CategoryService');
 const ProductService = require('../services/ProductService');
+const ContactService = require('../services/ContactService');
+
 
 const Common = require('../common/common');
 
@@ -114,6 +117,19 @@ router.post('/product/:productId/update',
 router.get('/product/:productId/delete',
   CommonController.validateObjectId,
   ProductService.deleteProduct
+);
+
+/**
+ * GET CONTACT INFORMATION
+ */
+router.get('/contact', ContactService.getContactInformaion);
+
+/**
+ * UPDATE CONTACT INFORMATION
+ */
+router.post('/contact',
+  ContactController.validate,
+  ContactService.updateContactInformaion
 );
 
 /**

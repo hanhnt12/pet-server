@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-let ProductService = require('../../services/ProductService');
+const CommonController = require('../../controllers/CommonController');
+const ProductService = require('../../services/ProductService');
 
 /* get default all products */
 router.get('/', ProductService.getProducts);
@@ -12,5 +13,13 @@ router.get('/:category', ProductService.getProductsByCategory);
  * Get product details
  */
 router.get('/product/:productId', ProductService.getProduct);
+
+/**
+ * Update view product
+ */
+router.post('/product/update/:productId', 
+  CommonController.validateObjectId,
+  ProductService.updateProductView
+);
 
 module.exports = router;

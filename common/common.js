@@ -22,6 +22,10 @@ exports.PRODUCT_DELETE_TITLE = 'Xóa sản phẩm';
 exports.PRODUCT_UPDATE_PATH_RENDER = 'dashboard/product/update';
 exports.PRODUCT_UPDATE_TITLE = 'Update sản phẩm';
 
+// for contact
+exports.CONTACT_UPDATE_PATH_RENDER = 'dashboard/contact';
+exports.CONTACT_UPDATE_TITLE = 'Update thông tin liên hệ';
+
 // record per page products
 exports.DEFAULT_RECORD_PER_PAGE = 6;
 
@@ -349,6 +353,43 @@ function createImageObject(req) {
   return image;
 }
 
+/**
+ * Create free items
+ * @param {request} req 
+ */
+function createFreeItems(req) {
+  let freeItems = [];
+
+  // max 5 free items, start from 1
+  for (let i = 1; i <= 5; i++) {
+    let itemTitle = "freeTitle" + i;
+    let itemValue = "freeValue" + i;
+
+    // santize
+    this.santizeItem(req, itemTitle);
+    this.santizeItem(req, itemValue);
+
+    // get title and name of free item from request
+    let title = req.body[itemTitle];
+    let value = req.body[itemValue];
+
+    let freeObj = {};
+
+    // create object free item
+    if (title && value) {
+      freeObj.title = title
+      freeObj.value = value
+    }
+
+    // if free item have value and title then add to array
+    if (!isEmpty(freeObj)) {
+      freeItems.push(freeObj);
+    }
+  }
+
+  return freeItems;
+}
+
 exports.customLog = customLog;
 
 exports.isDashboardRote = isDashboardRote;
@@ -368,3 +409,5 @@ exports.createUrlPagination = createUrlPagination;
 exports.isEmpty = isEmpty;
 
 exports.createImageObject = createImageObject;
+
+exports.createFreeItems = createFreeItems;

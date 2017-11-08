@@ -18,6 +18,12 @@ let schema = new Schema({
   price: { type: Number, default: 0 },
   priceSale: { type: Number, default: 0 },
   amount: { type: Number, default: 1 },
+  freeItems: [
+    {
+      title: { type: String, max: 50},
+      value: { type: String, max: 50}
+    }
+  ],
   display: { type: Boolean, required: true, default: true },
   views: { type: Number, default: 1 },
   starts: { type: Number, default: 1 },

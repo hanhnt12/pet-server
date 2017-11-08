@@ -80,6 +80,39 @@ block content
               type="number" min="0" value!=product.priceSale)
           div.col-lg-2
             b ,000 VND
+
+        if product.freeItems && product.freeItems.length > 0
+          - let i = 0
+          while i < 5
+            - let freeItem = product.freeItems[i]
+            - let freeItemName = "freeTitle" + (i + 1)
+            - let freeItemValue = "freeValue" + (i + 1)
+            - let lbl = "Thông tin thêm " + (i + 1)
+            div.col-lg-12.form-group
+            if freeItem
+              label.col-lg-2= lbl
+              div.col-lg-4
+                input.form-control(name=freeItemName value!=product.freeItems[i].title placeholder="Nhập title item")
+              div.col-lg-4
+                input.form-control(name=freeItemValue value!=product.freeItems[i].value placeholder="Nhập nội dung hiển thị")
+            else
+              label.col-lg-2= lbl
+              div.col-lg-4
+                input.form-control(name=freeItemName placeholder="Nhập title item")
+              div.col-lg-4
+                input.form-control(name=freeItemValue placeholder="Nhập nội dung hiển thị")
+            - i++
+        else
+          each i in [1, 2, 3, 4, 5]
+            - let freeItemName = "freeTitle" + i
+            - let freeItemValue = "freeValue" + i
+            - let lbl = "Thông tin thêm " + i
+            div.col-lg-12.form-group
+              label.col-lg-2= lbl
+              div.col-lg-4
+                input.form-control(name=freeItemName placeholder="Nhập title item")
+              div.col-lg-4
+                input.form-control(name=freeItemValue placeholder="Nhập nội dung hiển thị")
         div.col-lg-12.form-group
           div.col-md-4
             button#add-product-btn.btn.btn-warning(type='submit') Update

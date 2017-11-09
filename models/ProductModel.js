@@ -7,7 +7,8 @@ let schema = new Schema({
   image: [
     {
       pathImage: { type: String, required: true, min: 10 },
-      defaultImage: { type: Boolean, default: false }
+      defaultImage: { type: Boolean, default: false },
+      bannerImage: { type: Boolean, default: false }
     }
   ],
   category: {
@@ -20,8 +21,8 @@ let schema = new Schema({
   amount: { type: Number, default: 1 },
   freeItems: [
     {
-      title: { type: String, max: 50},
-      value: { type: String, max: 50}
+      title: { type: String, max: 50 },
+      value: { type: String, max: 50 }
     }
   ],
   display: { type: Boolean, required: true, default: true },
@@ -77,5 +78,20 @@ schema
     }
     return '';
   });
+
+// display on banner
+schema
+  .virtual('bannerImage')
+  .get(function () {
+    if (this.image && this.image.length > 0) {
+      for (let i = 0; i < this.image.length; i++) {
+        if (this.image[i].bannerImage) {
+          return true;
+        }
+      }
+    }
+    return false;
+  });
+
 
 module.exports = mongoose.model('products', schema);

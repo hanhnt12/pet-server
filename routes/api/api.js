@@ -16,6 +16,9 @@ router.get('/', function (req, res, next) {
 /* GET portfolio. */
 router.get('/portfolio', ProductService.getPortfolio);
 
+/* GET image product for main banner. */
+router.get('/banner', ProductService.getPortfolio);
+
 /* GET contact information. */
 router.get('/contact', ContactService.getContactInformaion);
 

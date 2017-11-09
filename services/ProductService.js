@@ -417,12 +417,46 @@ exports.getPortfolio = async function (req, res, next) {
   try {
 
     // sort desc by createDate, views
-    let sort = { sort: { createDate: -1, views: -1, starts: -1 } };
-    let projection = 'title image price'
+    let sort = {
+      sort: {
+        createDate: -1,
+        views: -1,
+        starts: -1
+      }
+    };
+    // projection
+    let projection = {
+      title: 1,
+      'image.$.pathImage': 1,
+      price: 1
+    };
+    // get only product have image and default image
+    let query = {
+      image: {
+        $gt: []
+      },
+      'image.defaultImage': true
+    };
+
+    // only get first 6 records
+    let paggingObj = {
+      skip: 0,
+      limit: 6
+    }
+
+    // when route banner
+    if (Common.isRoute(req, Common.BANNER)) {
+      // get only product image that have setting banner
+      query = { 'image.bannerImage': true };
+
+      // only get 3 records
+      paggingObj.limit = 3;
+
+    }
 
     // get list products
     // find product that image have image
-    let products = await getProducts({ image: { $gt: [] } }, projection, sort);
+    let products = await getProducts(query, projection, sort);
 
     // output json
     res.json(products);

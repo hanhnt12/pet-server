@@ -6,6 +6,11 @@ const Common = require('../common/common');
  */
 exports.validate = function (req, res, next) {
 
+  Common.checkBodyRequestLength(req, 'title', 4, 50);
+  Common.checkBodyRequestLength(req, 'caption', 10, 500);
+  Common.checkBodyRequestLength(req, 'name', 4, 50);
+  Common.santizeItem(req, 'title');
+  Common.santizeItem(req, 'caption');
   Common.santizeItem(req, 'phone');
   Common.santizeItem(req, 'mobile');
   Common.santizeItem(req, 'email');
@@ -17,6 +22,9 @@ exports.validate = function (req, res, next) {
 
   // create object to keep data
   let contact = {
+    title: req.body.title,
+    caption: req.body.caption,
+    name: req.body.name,
     phone: req.body.phone,
     mobile: req.body.mobile,
     email: req.body.email,

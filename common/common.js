@@ -2,6 +2,8 @@ const config = require('../config/config');
 
 // define constant
 const DASH_BOARD = 'dashboard';
+// define banner route
+exports.BANNER = 'banner';
 
 // for dashboard
 exports.DASHBOARD_PATH_RENDER = 'dashboard/index';
@@ -78,13 +80,24 @@ function customLog(req, ...value) {
  */
 function isDashboardRote(req) {
   // if url contains dashboard
-  if (req.originalUrl.indexOf(DASH_BOARD) > 0) {
+  if (isRoute(req, DASH_BOARD)) {
     customLog(req, 'isDashboardRote', req.originalUrl);
     return true;
   }
 
   customLog(req, 'is api route', req.originalUrl);
 
+  return false;
+}
+
+/**
+ * Check route access
+ */
+function isRoute(req, routePattern) {
+  // if url contains dashboard
+  if (req.originalUrl.indexOf(routePattern) > 0) {
+    return true;
+  }
   return false;
 }
 
@@ -126,7 +139,7 @@ function renderError(req, res, err, pathRender, title, dataError) {
   if (!title) {
     title = 'Error';
   }
-
+  
   // when fron dashboar route
   if (isDashboardRote(req)) {
     res.render(pathRender, {
@@ -136,7 +149,7 @@ function renderError(req, res, err, pathRender, title, dataError) {
     });
   } else {
     // log error for api
-    res.json(config.commonError);
+    res.json(this.commonError);
   }
 }
 
@@ -330,6 +343,13 @@ function createImageObject(req) {
       imgObj.defaultImage = true;
       image.push(imgObj);
     }
+
+    // set default banner
+    if (req.body.bannerImage) {
+      imgObj.bannerImage = true;
+    } else {
+      imgObj.bannerImage = false;
+    }
   } else if (req.body.imagePath.length > 0) {
     // loop images request
     for (let i = 0; i < req.body.imagePath.length; i++) {
@@ -337,10 +357,18 @@ function createImageObject(req) {
       // if exist image path then create image object 
       if (req.body.imagePath[i]) {
         imgObj.pathImage = req.body.imagePath[i];
+        // set default image
         if (req.body.defaultImage == (i + 1)) {
           imgObj.defaultImage = true;
         } else {
           imgObj.defaultImage = false
+        }
+
+        // set display banner
+        if (req.body.bannerImage == (i + 1)) {
+          imgObj.bannerImage = true;
+        } else {
+          imgObj.bannerImage = false
         }
         image.push(imgObj);
       }
@@ -393,6 +421,8 @@ function createFreeItems(req) {
 exports.customLog = customLog;
 
 exports.isDashboardRote = isDashboardRote;
+
+exports.isRoute = isRoute;
 
 exports.renderError = renderError;
 

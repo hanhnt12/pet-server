@@ -55,13 +55,17 @@ $(document).ready(function () {
             var imageGroup = imageGroupInput.clone().removeAttr('id');
             imageGroup.find('.imagePath').val('');
             imageGroup.find('[name="defaultImage"]').prop('checked', false);
+            imageGroup.find('[name="bannerImage"]').prop('checked', false);
             imageGroup.appendTo("#imageGroup");
             $(this).prop('disabled', false);
 
             // change value of radio on input group
             let defaultImg = document.getElementsByClassName('defaultImage');
+            let bannerImg = document.getElementsByClassName('bannerImage');
             let rdImg = defaultImg.length;
+            let rdBanner = bannerImg.length;
             defaultImg[rdImg - 1].value = rdImg;
+            bannerImg[rdBanner - 1].value = rdBanner;
         } else {
             $('#imagePreview').attr('src', '');
             $('#modalContent').text('Chỉ được nhập tối đa 5 hình ảnh.');
@@ -81,9 +85,14 @@ $(document).ready(function () {
             maxAppend--;
             // refresh value of radios follow order
             let defaultImg = document.getElementsByClassName('defaultImage');
+            let bannerImg = document.getElementsByClassName('bannerImage');
             let rdImg = defaultImg.length;
-            for (i = 0; i < rdImg; i++) {
+            let rdBanner = bannerImg.length;
+            for (let i = 0; i < rdImg; i++) {
                 defaultImg[i].value = i + 1;
+            }
+            for (let i = 0; i < rdBanner; i++) {
+                rdBanner[i].value = i + 1;
             }
         } else {
             $('#imagePreview').attr('src', '');

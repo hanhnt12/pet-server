@@ -11,6 +11,18 @@ block content
       - contact = dataError
     form.form-horizontal(method="POST")
       div.form-group
+        label.control-label.col-sm-2(for='title') Tiêu đề:
+        div.col-sm-10
+          input.form-control#name(value=contact.title name="title")
+      div.form-group
+        label.control-label.col-sm-2(for='caption') Caption:
+        div.col-sm-10
+          input.form-control#name(value=contact.caption name="caption")
+      div.form-group
+        label.control-label.col-sm-2(for='name') Tên liên lạc:
+        div.col-sm-10
+          input.form-control#name(value=contact.name name="name")
+      div.form-group
         label.control-label.col-sm-2(for='phone') Phone:
         div.col-sm-10
           input.form-control#name(value=contact.phone name="phone")

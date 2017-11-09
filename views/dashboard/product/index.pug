@@ -47,6 +47,12 @@ block content
                     i.fa.fa-eye
                     | 
                     = product.views
+                  if product.bannerImage
+                    |  
+                    span.label.label-danger(data-toggle="tooltip"
+                      data-original-title="Hiển thị trên banner chính")
+                      i.fa.fa-star
+
               div.caption
                 h4.title !{product.title}
                 h4.group.inner.list-group-item-heading !{product.name}

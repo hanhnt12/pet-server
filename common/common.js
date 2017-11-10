@@ -66,7 +66,7 @@ exports.commonError = {
  */
 function customLog(req, ...value) {
   if (req) {
-    console.log(new Date() + req.method + ': ' + req.url);
+    console.log(new Date() + req.method + '--------- Request for: ' + req.url);
   }
 
   for (val of value) {
@@ -418,6 +418,20 @@ function createFreeItems(req) {
   return freeItems;
 }
 
+/**
+ * Set query, projectin, sort to request
+ * @param {*} req 
+ * @param {*} queryObj 
+ * @param {*} projection 
+ * @param {*} sortObj 
+ * @param {*} isDashboardRoute 
+ */
+function setQueryToRequest(req, queryObj = {}, projection = '', sortObj = {}) {
+  req.queryObj = queryObj;
+  req.projection = projection;
+  req.sortObj = sortObj;
+}
+
 exports.customLog = customLog;
 
 exports.isDashboardRote = isDashboardRote;
@@ -441,3 +455,5 @@ exports.isEmpty = isEmpty;
 exports.createImageObject = createImageObject;
 
 exports.createFreeItems = createFreeItems;
+
+exports.setQueryToRequest = setQueryToRequest;

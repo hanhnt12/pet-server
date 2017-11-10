@@ -428,7 +428,8 @@ exports.getPortfolio = async function (req, res, next) {
     let projection = {
       title: 1,
       'image.$.pathImage': 1,
-      price: 1
+      price: 1,
+      priceSale: 1
     };
     // get only product have image and default image
     let query = {

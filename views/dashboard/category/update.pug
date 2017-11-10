@@ -18,7 +18,11 @@ block content
         label.control-label.col-sm-2(for='name') Category name:
         div.col-sm-10
           input.form-control#name(value=category.name name="name" disabled)
-          input.form-control#name(type="hidden" value!=category.name name="name")
+          input(type="hidden" value!=category.name name="name")
+      div.form-group
+        label.control-label.col-sm-2(for='nameMenu') Tên hiển thị:
+        div.col-sm-10
+          input.form-control#nameMenu(value=category.nameMenu name="nameMenu")
       div.form-group
         label.control-label.col-sm-2(for='title') Category title:
         div.col-sm-10

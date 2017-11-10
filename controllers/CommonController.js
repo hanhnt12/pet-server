@@ -9,12 +9,14 @@ exports.validateObjectId = function (req, res, next) {
   // santize
   Common.santizeItem('categoryId');
   Common.santizeItem('productId');
+  Common.santizeItem('contactId');
 
   // get parameter
   let categoryId = req.params.categoryId;
   let productId = req.params.productId;
+  let contactId = req.params.contactId;
 
-  let id = categoryId || productId;
+  let id = categoryId || productId || contactId;
 
   // validate category id
   if (!Common.isValidObjectId(id)) {
@@ -33,6 +35,9 @@ exports.validateObjectId = function (req, res, next) {
       } else if (req.originalUrl.indexOf('categor') > 0) {
         pathRender = Common.CATEGORY_PATH_RENDER_UPDATE;
         pathTitle = Common.CATEGORY_TITLE_UPDATE;
+      } else if (req.originalUrl.indexOf('contact') > 0) {
+        pathRender = Common.CONTACT_UPDATE_PATH_RENDER;
+        pathTitle = Common.CONTACT_UPDATE_TITLE;
       }
 
       // render screen error

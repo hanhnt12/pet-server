@@ -7,7 +7,8 @@ mongoose.connect(dbUrl);
 var categories = [
   new Category({
     imagePath: 'pet.png',
-    name: 'pet',
+    name: 'pets',
+    nameMenu: 'Thú cưng',
     title: 'Chúng tôi có mọi loại pets mà bạn muốn.',
     description: 'Since 1926, our pet store has helped people throughout the area find a new family pet to bring home and love. Whether you like traditional pets such as kittens and puppies or need a low-maintenance pet such as a fish, you are sure to find the right animal for you.',
     amount: 100,
@@ -17,6 +18,7 @@ var categories = [
   new Category({
     imagePath: 'care.png',
     name: 'service',
+    nameMenu: 'Dịch vụ',
     title: 'Nhiều dịch vụ chăm sóc pet',
     description: 'Purebred Puppies, Mixed Breed Puppies, Kittens, Fish, Assortment of Small Animals',
     amount: 38,
@@ -26,6 +28,7 @@ var categories = [
   new Category({
     imagePath: 'acessories.png',
     name: 'accessory',
+    nameMenu: 'Phụ kiện',
     title: 'Với rất nhiều phụ kiện cho pet',
     description: 'Purebred Puppies, Mixed Breed Puppies, Kittens, Fish, Assortment of Small Animals',
     amount: 72,

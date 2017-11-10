@@ -2,6 +2,8 @@ let CategoryModel = require('../models/CategoryModel');
 const config = require('../config/config');
 const Common = require('../common/common');
 
+const DEFAULT_PROJECTION = 'imagePath name nameMenu title description amount display displayOrder'
+
 /**
  * Get list categories name
  */
@@ -43,27 +45,19 @@ exports.getCategoryName = async function (req, res, next) {
  */
 exports.getCategories = async function (req, res) {
   try {
-    // query
-    let query = { display: true };
-    let dashboardF = false;
+    // query from request or create
+    let query = req.queryObj || {};
 
     // projection
-    let projection = 'imagePath name title description amount'
+    let projection = req.projection || DEFAULT_PROJECTION;
 
-    // when route from dashboard, query all and projection all
-    if (Common.isDashboardRote(req)) {
-      dashboardF = true;
-      query = {};
-      projection = '';
-    }
+    // sort order
+    let sort = req.sortObj || {};
 
-    // sorting follow displayOrder
-    // 1: asc: -1: desc
-    let sort = { sort: { displayOrder: 1 } };
     // use model to query db
     let categories = await CategoryModel.find(query, projection, sort);
 
-    if (!dashboardF) {
+    if (!req.isDashboardRoute) {
       // output json
       res.json(categories);
     } else {
@@ -74,18 +68,18 @@ exports.getCategories = async function (req, res) {
     }
     // Handler error
   } catch (err) {
-      Common.renderError(
-        req,
-        res,
-        err,
-        Common.CATEGORY_PATH_RENDER,
-        Common.CATEGORY_TITLE
-      );
-    }
+    Common.renderError(
+      req,
+      res,
+      err,
+      Common.CATEGORY_PATH_RENDER,
+      Common.CATEGORY_TITLE
+    );
+  }
 }
 
 /**
- * Get information to confirm category
+ * Get information to confirm category (for dashboard)
  */
 exports.updateCategoryGet = async function (req, res, next) {
   try {
@@ -127,37 +121,40 @@ exports.updateCategoryGet = async function (req, res, next) {
 }
 
 /**
- * Update category
+ * Update category (for dashboard)
  */
 exports.updateCategoryPost = async function (req, res, next) {
   try {
-    // get category id
-    let categoryId = req.params.categoryId
 
     // create object to update
-    let category = {
-      name: req.body.name,
-      title: req.body.title,
-      description: req.body.description,
-      display: req.body.display === "1",
-      _id: categoryId
-    };
+    let category = req.category;
+
+    // get category id
+    let categoryId = category._id;
 
     // log value to update
-    Common.customLog(req, 'updateCategoryPost', 'value to update', category);
+    Common.customLog(req, 'update category updateCategoryPost', 'value to update', category);
 
     // Update category
     let result = await CategoryModel.findByIdAndUpdate(categoryId, category, {});
 
-    // log result update
-    Common.customLog(null, 'updateCategoryPost', 'Result update', result);
+    if (!result) {
+      Common.customLog(req, 'update category', 'Update failed', result);
+      // render again with error
+      res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
+        title: Common.CATEGORY_TITLE_UPDATE,
+        category: category,
+        completed: Common.failedAction
+      });
+    } else {
 
-    // render again
-    res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
-      title: Common.CATEGORY_TITLE_UPDATE,
-      category: category,
-      completed: Common.updateSuccess
-    });
+      // render again
+      res.render(Common.CATEGORY_PATH_RENDER_UPDATE, {
+        title: Common.CATEGORY_TITLE_UPDATE,
+        category: category,
+        completed: Common.updateSuccess
+      });
+    }
 
   } catch (err) {
     Common.renderError(

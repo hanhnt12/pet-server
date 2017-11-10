@@ -7,10 +7,8 @@ const Common = require('../common/common');
 exports.validateSearch = function (req, res, next) {
 
   // santize
-  req.sanitize('category').escape();
-  req.sanitize('category').trim();
-  req.sanitize('q').escape();
-  req.sanitize('q').trim();
+  Common.santizeItem(req, 'category');
+  Common.santizeItem(req, 'q');
 
   next();
 }

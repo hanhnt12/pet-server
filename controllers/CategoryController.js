@@ -1,32 +1,6 @@
 const config = require('../config/config');
 const Common = require('../common/common');
 
-// /**
-//  * validate category id
-//  */
-// exports.validateCategoryId = function (req, res, next) {
-
-//   // get parameter
-//   let categoryId = req.params.categoryId;
-
-//   // validate category id
-//   if (!Common.isValidObjectId(categoryId)) {
-//     // define error
-//     let error = Common.createObjError('', 'Category', false);
-
-//     // render screen error
-//     Common.renderError(
-//       req,
-//       res,
-//       error,
-//       Common.CATEGORY_PATH_RENDER,
-//       Common.CATEGORY_TITLE
-//     );
-//   } else {
-//     next();
-//   }
-// }
-
 /**
  * validate when post update category
  */
@@ -34,39 +8,37 @@ exports.validateUpdatePost = function (req, res, next) {
 
   // validate data
   Common.checkBodyRequestLength(req, 'name');
+  Common.checkBodyRequestLength(req, 'nameMenu', 4, 50);
   Common.checkBodyRequestLength(req, 'title', 10, 100);
-  Common.checkBodyRequestLength(req, 'description', 10, 4000);
+  Common.checkBodyRequestLength(req, 'description', 10, 500);
   Common.checkBodyRequestLength(req, 'display', 1, 1);
 
   // santize
-  req.sanitize('categoryId').escape();
-  req.sanitize('categoryId').trim();
-  req.sanitize('name').escape();
-  req.sanitize('name').trim();
-  req.sanitize('title').escape();
-  req.sanitize('title').trim();
-  req.sanitize('description').escape();
-  req.sanitize('description').trim();
-  req.sanitize('display').escape();
-  req.sanitize('display').trim();
+  Common.santizeItem('categoryId');
+  Common.santizeItem('name');
+  Common.santizeItem('nameMenu');
+  Common.santizeItem('title');
+  Common.santizeItem('description');
+  Common.santizeItem('display');
 
   // validate error
   let errors = req.validationErrors();
+
+  // create object to keep data
+  let category = {
+    name: req.body.name,
+    nameMenu: req.body.nameMenu,
+    title: req.body.title,
+    description: req.body.description,
+    display: req.body.display === "1",
+    _id: req.params.categoryId
+  };
 
   // when validate have error
   if (errors) {
 
     // log error
-    Common.customLog(req, 'validateUpdatePost', 'error', errors);
-
-    // create object to keep data
-    let category = {
-      name: req.body.name,
-      title: req.body.title,
-      description: req.body.description,
-      display: req.body.display === "1",
-      _id: req.body.categoryId
-    };
+    Common.customLog(req, 'category update validateUpdatePost', 'error', errors);
 
     // render screen error
     Common.renderError(
@@ -78,6 +50,37 @@ exports.validateUpdatePost = function (req, res, next) {
       category
     );
   } else {
+    // set to update
+    req.category = category;
     next();
   }
+}
+
+/**
+ * prepare get category
+ * prepare object query, sort, projection
+ */
+exports.getCategoriesAPI = function (req, res, next) {
+
+  // create query object
+  // only get category is set display true
+  let queryObj = {
+    display: true
+  };
+
+  // projection
+  let projection = 'imagePath name nameMenu title description';
+
+  // sorting follow displayOrder
+  // 1: asc: -1: desc
+  let sortObj = {
+    sort: { 
+      displayOrder: 1 
+    }
+  };
+
+  // set all object to request
+  Common.setQueryToRequest(req, queryObj, projection, sortObj)
+
+  next();
 }

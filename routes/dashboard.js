@@ -8,11 +8,12 @@ const CategoryService = require('../services/CategoryService');
 const ProductService = require('../services/ProductService');
 const ContactService = require('../services/ContactService');
 
-
 const Common = require('../common/common');
 
 // verify user was loged in can access
 router.use('/', isLoggedIn, function (req, res, next) {
+  // setting flag
+  req.isDashboardRoute = true;
   next();
 });
 

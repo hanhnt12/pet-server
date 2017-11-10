@@ -4,6 +4,7 @@ let Schema = mongoose.Schema;
 let schema = new Schema({
     imagePath: { type: String, required: true },
     name: { type: String, required: true, lowercase: true, unique: true },
+    nameMenu: { type: String, required: true},
     title: { type: String, required: true, lowercase: true },
     description: { type: String, required: true },
     amount: { type: Number, required: true, default: 0 },

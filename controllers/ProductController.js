@@ -3,12 +3,78 @@ const Common = require('../common/common');
 
 /**
  * validate search condition
+ * set query to request
  */
 exports.validateSearch = function (req, res, next) {
 
   // santize
   Common.santizeItem(req, 'category');
   Common.santizeItem(req, 'q');
+
+  // get category name from request
+  let categoryName = req.params.category || req.query.category || req.body.category;
+  let productTitle = req.params.q || req.query.q || req.body.q;
+  let page = req.query.page || req.body.page || 1;
+  let perPage = req.query.perPage || req.body.perPage || Common.DEFAULT_RECORD_PER_PAGE;
+  Common.customLog(req, 'create query search', `categoryName: ${categoryName}`, `productTitle: ${productTitle}`);
+
+  // define object search
+  let queryCategory = {};
+  let queryTitle = {};
+  let queryObj = {};
+  let paggingObj = {};
+
+  // if search by category
+  if (categoryName) {
+    queryCategory = { 'category.name': categoryName };
+  }
+
+  // if search by title
+  if (productTitle) {
+    queryTitle.title = {
+      $regex: productTitle,
+      $options: 'i'
+    };
+  }
+
+  // create query object
+  if (categoryName && productTitle) {
+    queryObj = { $and: [queryCategory, queryTitle] };
+  } else if (categoryName) {
+    queryObj = queryCategory;
+  } else if (productTitle) {
+    queryObj = queryTitle;
+  } else {
+    queryObj = {};
+  }
+
+  // projection
+  let projection = 'image title price priceSale views category';
+
+  // sorting follow displayOrder
+  // 1: asc: -1: desc
+  let sortObj = {
+    sort: {
+      displayOrder: -1
+    }
+  };
+
+  // get most view product
+  if (categoryName === 'most_view') {
+    Common.customLog(req, 'get most view product', queryCategory)
+    // sort desc by views
+    sortObj = { sort: { views: -1 } };
+    queryObj = {};
+    paggingObj = {
+      skip: 0,
+      limit: 3
+    }
+  }
+
+  // set all object to request
+  Common.setQueryToRequest(req, queryObj, projection, sortObj, paggingObj);
+  req.page = page;
+  req.perPage = perPage;
 
   next();
 }

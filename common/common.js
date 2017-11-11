@@ -65,12 +65,14 @@ exports.commonError = {
  * write log value
  */
 function customLog(req, ...value) {
-  if (req) {
-    console.log(new Date() + req.method + '--------- Request for: ' + req.url);
-  }
+  if (config.GET_LOG_DEBUG) {
+    if (req) {
+      console.log(new Date() + req.method + '--------- Request for: ' + req.originalUrl);
+    }
 
-  for (val of value) {
-    console.log(val);
+    for (val of value) {
+      console.log(val);
+    }
   }
 }
 
@@ -123,9 +125,9 @@ function renderError(req, res, err, pathRender, title, dataError) {
   if (!title) {
     title = 'Error';
   }
-  
+
   // when fron dashboar route
-  if (req.isDashboardRote) {
+  if (req.isDashboardRoute) {
     res.render(pathRender, {
       title: title,
       errors: errors,
@@ -266,11 +268,16 @@ function calculatePagging(page, perPage) {
     page = 1;
   }
 
+  // set default page
+  if (!Number.isInteger(parseInt(perPage)) || perPage < this.DEFAULT_RECORD_PER_PAGE) {
+    perPage = this.DEFAULT_RECORD_PER_PAGE;
+  }
+
   // calculate pagging
-  let limit = Number.isInteger(perPage) || this.DEFAULT_RECORD_PER_PAGE
+  let limit = perPage;
   let skip = limit * (page - 1);
 
-  customLog(null, 'calculatePagging', 'page: ', page)
+  customLog(null, 'commmon calculate pagging', 'page: ' + page, 'per_page: ' + perPage);
 
   // create paging object
   return {
@@ -283,6 +290,11 @@ function calculatePagging(page, perPage) {
  * check object is empty
  */
 function isEmpty(obj) {
+
+  if (!obj) {
+    return true;
+  }
+
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) {
       return false;
@@ -410,10 +422,11 @@ function createFreeItems(req) {
  * @param {*} sortObj 
  * @param {*} isDashboardRoute 
  */
-function setQueryToRequest(req, queryObj = {}, projection = '', sortObj = {}) {
+function setQueryToRequest(req, queryObj = {}, projection = '', sortObj = {}, paggingObj = {}) {
   req.queryObj = queryObj;
   req.projection = projection;
   req.sortObj = sortObj;
+  paggingObj.paggingObj = paggingObj;
 }
 
 exports.customLog = customLog;

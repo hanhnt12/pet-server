@@ -7,7 +7,7 @@ const Common = require('../common/common');
  */
 exports.getContactInformaion = async function (req, res, next) {
   try {
-    if (!(req).isDashboardRote) {
+    if (!req.isDashboardRoute) {
       let contact = await ContactModel.find({}, { '_id': 0, '__v': 0});
       // output json
       res.json(contact[0]);

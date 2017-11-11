@@ -22,7 +22,7 @@ exports.validateObjectId = function (req, res, next) {
   if (!Common.isValidObjectId(id)) {
 
     Common.customLog(req, 'validateObjectId', 'Id không đúng.');
-    if (req.isDashboardRote) {
+    if (req.isDashboardRoute) {
       // define error
       let error = Common.createObjError('', 'ID', false);
 

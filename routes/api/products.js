@@ -1,13 +1,26 @@
 var express = require('express');
 var router = express.Router();
 const CommonController = require('../../controllers/CommonController');
+const ProductController = require('../../controllers/ProductController');
 const ProductService = require('../../services/ProductService');
 
 /* get default all products */
-router.get('/', ProductService.getProducts);
+router.get('/', 
+  ProductController.validateSearch,
+  ProductService.searchProduct
+);
+
+/* get default all products for search at api*/
+router.post('/', 
+  ProductController.validateSearch,
+  ProductService.searchProduct
+);
 
 /* get list products depend on categories*/
-router.get('/:category', ProductService.getProductsByCategory);
+router.get('/:category', 
+  ProductController.validateSearch,
+  ProductService.searchProduct
+);
 
 /**
  * Get product details

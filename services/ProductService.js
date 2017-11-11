@@ -34,9 +34,6 @@ async function countProducts(query = {}, projection = '_id') {
   // for pagging
   let productCount = await ProductModel.find(query, projection, {}).count();
 
-  // log query object
-  Common.customLog(null, 'countProducts', 'query: ', query, 'result: ', productCount);
-
   return productCount;
 }
 
@@ -62,7 +59,7 @@ exports.getProducts = async function (req, res, next) {
     let products = await getProducts({}, null, sort);
 
     // check route to display
-    if (req.isDashboardRote) {
+    if (req.isDashboardRoute) {
       res.render(Common.PRODUCT_PATH_RENDER, {
         title: Common.PRODUCT_TITLE,
         products: products
@@ -79,42 +76,6 @@ exports.getProducts = async function (req, res, next) {
       Common.PRODUCT_PATH_RENDER,
       Common.PRODUCT_TITLE
     );
-  }
-}
-
-// get list products by category
-exports.getProductsByCategory = async function (req, res, next) {
-  try {
-    // get category name from request
-    let category = req.params.category;
-
-    // create query object
-    let query = { 'category.name': category };
-    let paggingObj = null;
-
-    let projection = null;
-    // sort desc by createDate, price
-    let sort = { sort: { createDate: -1, price: -1 } };
-
-    // get most view product
-    if (category === 'most_view') {
-      Common.customLog(req, 'getProductsByCategory', category)
-      // sort desc by views
-      sort = { sort: { views: -1 } };
-      query = {};
-      paggingObj = {
-        skip: 0,
-        limit: 3
-      }
-    }
-
-    let products = await getProducts(query, projection, sort, paggingObj);
-
-    // output json
-    res.json(products);
-  } catch (error) {
-    console.log(err);
-    res.json(config.commonError);
   }
 }
 
@@ -142,7 +103,7 @@ exports.getProduct = async function (req, res, next) {
       }
     });
 
-    if (req.isDashboardRote) {
+    if (req.isDashboardRoute) {
       // if can not get category
       if (!product) {
         let error = Common.createObjError('', 'Sản phẩm');
@@ -183,55 +144,48 @@ exports.getProduct = async function (req, res, next) {
  */
 exports.searchProduct = async function (req, res, next) {
   try {
-    // get category name from request
-    let categoryName = req.query.category || req.body.category;
+    Common.customLog(req, 'search product service START');
+    // create object seach
+    let queryObj = req.queryObj || {};
     let productTitle = req.query.q || req.body.q;
-    let page = req.query.page || req.body.page || 1;
 
-    // log parameter
-    Common.customLog(req, `category: ${categoryName}`, `title: ${productTitle}`, `page: ${page}`);
-
-    // define object search
-    let objSearch = {};
-
-    // if search by category
-    if (categoryName) {
-      objSearch.category.name = categoryName;
-    }
-
-    // if search by title
-    if (productTitle) {
-      objSearch.title = {
-        $regex: productTitle,
-        $options: 'i'
-      };
-    }
+    Common.customLog(req, 'search product service query object', queryObj);
 
     // calculate total page
-    let count = await countProducts(objSearch)
-    let totalPage = Math.ceil(count / parseInt(Common.DEFAULT_RECORD_PER_PAGE));
+    let count = await countProducts(queryObj)
+    let totalPage = Math.ceil(count / parseInt(req.perPage));
 
     // create pagging object
-    let paggingObj = Common.calculatePagging(page);
+    let paggingObj = req.paggingObj;
+    if (Common.isEmpty(paggingObj)) {
+      paggingObj = Common.calculatePagging(req.page, req.perPage);
+    }
+    Common.customLog(req, 'search product service pagging', paggingObj);
 
     // sorting follow displayOrder
     // 1: asc: -1: desc
-    let sort = { sort: { createDate: -1 } };
+    let sortObj = req.sortObj || {};
+
+    // projection
+    let projection = req.projection || DEFAULT_PROJECTION;
 
     // search product
-    let products = await getProducts(objSearch, DEFAULT_PROJECTION, sort, paggingObj);
+    let products = await getProducts(queryObj, projection, sortObj, paggingObj);
+    Common.customLog(req, 'search product service total record', products.length);
 
     // check route to display
-    if (req.isDashboardRote) {
+    if (req.isDashboardRoute) {
       res.render(Common.PRODUCT_PATH_RENDER, {
         title: Common.PRODUCT_TITLE,
         products: products,
         q: productTitle,
-        page: page,
+        page: req.page,
         totalPage: totalPage,
         url: Common.createUrlPagination(req)
       });
     } else {
+      // set total page for paging
+      res.set(config.HEADER_PRODUCT_PAGE_COUNT, totalPage);
       // output json
       res.json(products);
     }

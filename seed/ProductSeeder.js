@@ -3,6 +3,12 @@ let Category = require('../models/CategoryModel');
 let mongoose = require('mongoose');
 const dbUrl = require('../config/config').url
 
+
+console.log('Connecting:' + dbUrl)
+if (!dbUrl.startsWith('mongodb://')) {
+  console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
+  return;
+}
 mongoose.connect(dbUrl, {
   useMongoClient: true
 });

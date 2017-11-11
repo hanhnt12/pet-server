@@ -17,9 +17,12 @@ var app = express();
 
 //==================== configuration============================
 // conect to database
-mongoose.connect(config.url, {
+let dbUrl = config.url;
+mongoose.connect(dbUrl, {
   useMongoClient: true
 });
+
+console.log('url' + config.url)
 
 require('./config/passport');
 //==================== configuration============================

@@ -75,22 +75,6 @@ function customLog(req, ...value) {
 }
 
 /**
- * Check route is from dashboard
- * to distinguish with api route
- */
-function isDashboardRote(req) {
-  // if url contains dashboard
-  if (isRoute(req, DASH_BOARD)) {
-    customLog(req, 'isDashboardRote', req.originalUrl);
-    return true;
-  }
-
-  customLog(req, 'is api route', req.originalUrl);
-
-  return false;
-}
-
-/**
  * Check route access
  */
 function isRoute(req, routePattern) {
@@ -141,7 +125,7 @@ function renderError(req, res, err, pathRender, title, dataError) {
   }
   
   // when fron dashboar route
-  if (isDashboardRote(req)) {
+  if (req.isDashboardRote) {
     res.render(pathRender, {
       title: title,
       errors: errors,
@@ -433,8 +417,6 @@ function setQueryToRequest(req, queryObj = {}, projection = '', sortObj = {}) {
 }
 
 exports.customLog = customLog;
-
-exports.isDashboardRote = isDashboardRote;
 
 exports.isRoute = isRoute;
 

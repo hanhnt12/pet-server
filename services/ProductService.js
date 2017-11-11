@@ -62,7 +62,7 @@ exports.getProducts = async function (req, res, next) {
     let products = await getProducts({}, null, sort);
 
     // check route to display
-    if (Common.isDashboardRote(req)) {
+    if (req.isDashboardRote) {
       res.render(Common.PRODUCT_PATH_RENDER, {
         title: Common.PRODUCT_TITLE,
         products: products
@@ -142,7 +142,7 @@ exports.getProduct = async function (req, res, next) {
       }
     });
 
-    if (Common.isDashboardRote(req)) {
+    if (req.isDashboardRote) {
       // if can not get category
       if (!product) {
         let error = Common.createObjError('', 'Sản phẩm');
@@ -222,7 +222,7 @@ exports.searchProduct = async function (req, res, next) {
     let products = await getProducts(objSearch, DEFAULT_PROJECTION, sort, paggingObj);
 
     // check route to display
-    if (Common.isDashboardRote(req)) {
+    if (req.isDashboardRote) {
       res.render(Common.PRODUCT_PATH_RENDER, {
         title: Common.PRODUCT_TITLE,
         products: products,

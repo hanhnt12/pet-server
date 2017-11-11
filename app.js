@@ -22,7 +22,9 @@ mongoose.connect(dbUrl, {
   useMongoClient: true
 });
 
-console.log('url' + config.url)
+console.log('url connect db: ' + config.url)
+var db = mongoose.connection;
+mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 require('./config/passport');
 //==================== configuration============================

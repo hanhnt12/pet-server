@@ -10,7 +10,7 @@ exports.validate = function (req, res, next) {
   Common.checkBodyRequestLength(req, 'caption', 10, 500);
   Common.checkBodyRequestLength(req, 'name', 4, 50);
   Common.santizeItem(req, 'title');
-  Common.santizeItem(req, 'caption');
+  // Common.santizeItem(req, 'caption');
   Common.santizeItem(req, 'phone');
   Common.santizeItem(req, 'mobile');
   Common.santizeItem(req, 'email');

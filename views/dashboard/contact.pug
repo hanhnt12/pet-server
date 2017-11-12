@@ -17,7 +17,7 @@ block content
       div.form-group
         label.control-label.col-sm-2(for='caption') Caption:
         div.col-sm-10
-          input.form-control#name(value=contact.caption name="caption")
+          textarea.form-control#name(rows="5" name="caption") !{ contact.caption}
       div.form-group
         label.control-label.col-sm-2(for='name') Tên liên lạc:
         div.col-sm-10

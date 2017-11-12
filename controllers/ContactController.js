@@ -28,6 +28,7 @@ exports.validate = function (req, res, next) {
     phone: req.body.phone,
     mobile: req.body.mobile,
     email: req.body.email,
+    facebookLink: req.body.facebookLink,
     _id: req.body.contactId
   };
 

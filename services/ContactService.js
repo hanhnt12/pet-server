@@ -51,6 +51,7 @@ exports.updateContactInformaion = function (req, res, next) {
           contact
         );
       } else {
+        Common.customLog(req, 'update contact information', contact);
         let complete = Common.updateSuccess;
         complete['action'] = '/dashboard/products';
         res.render(Common.CONTACT_UPDATE_PATH_RENDER, {

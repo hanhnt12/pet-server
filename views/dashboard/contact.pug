@@ -29,11 +29,15 @@ block content
       div.form-group
         label.control-label.col-sm-2(for='mobile') Mobile:
         div.col-sm-10
-          input.form-control#title(value!=contact.mobile name="mobile")
+          input.form-control#mobile(value!=contact.mobile name="mobile")
       div.form-group
         label.control-label.col-sm-2(for='email') Email:
         div.col-sm-10
-          input.form-control#title(value!=contact.email name="email")
+          input.form-control#email(value!=contact.email name="email")
+      div.form-group
+        label.control-label.col-sm-2(for='fbLink') Link facebook:
+        div.col-sm-10
+          input.form-control#fbLink(value!=contact.facebookLink name="facebookLink")
       input(value!=contact._id name="contactId" type="hidden")
       div.form-group
         div.col-sm-2

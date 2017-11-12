@@ -48,7 +48,27 @@ block content
                     button.btn.btn-sm.btn-primary.btnPreview(data-toggle="tooltip"
                       data-original-title="Preview")
                       i.fa.fa-search
-
+              else
+                div.form-group.imageGroupInput#imageGroupInput
+                  div.col-md-6
+                    input.imagePath.form-control(name="imagePath" 
+                      placeholder="Link hình ảnh sản phẩm" value="")
+                  div.col-md-2
+                    label
+                      input.defaultImage(type="radio" name="defaultImage" checked="checked" value="1")
+                      | Default
+                  div.col-md-2
+                    label
+                      input.bannerImage(type="radio" name="bannerImage" value="1")
+                      | Banner
+                  div.col-md-2
+                    button.btn.btn-sm.btn-danger.btnRemove(data-toggle="tooltip"
+                      data-original-title="Xóa ảnh này")
+                      i.fa.fa-times
+                    | 
+                    button.btn.btn-sm.btn-primary.btnPreview(data-toggle="tooltip"
+                      data-original-title="Preview")
+                      i.fa.fa-search
         div.col-lg-12.form-group
           label.col-lg-2(for="category") Loại sản phẩm
           div.col-lg-4

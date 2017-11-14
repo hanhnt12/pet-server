@@ -9,7 +9,7 @@ body, html {
   height: 100%;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #333;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 section {
@@ -62,4 +62,27 @@ ul {
   /* font-size: 2.5vw; */
   color: #9D0D0D;
   font-weight: bold;
+}
+
+@media (min-width: 992px) {
+  html, body {
+    overflow: auto;
+  }
+  ::-webkit-scrollbar
+  {
+    width: 5px;  /* for vertical scrollbars */
+    height: 10px; /* for horizontal scrollbars */
+  }
+
+  ::-webkit-scrollbar-track
+  {
+    background: rgba(63, 208, 252, 0.1);
+    opacity: .5;
+  }
+
+  ::-webkit-scrollbar-thumb
+  {
+    background: rgba(63, 208, 252, 0.1);
+    opacity: .5
+  }
 }

@@ -14,6 +14,7 @@ var MongoStore = require('connect-mongo')(session);
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config/config'); // config all system
 var app = express();
+var history = require('connect-history-api-fallback');
 
 //==================== configuration============================
 // conect to database
@@ -95,6 +96,12 @@ var dashboard = require('./routes/dashboard');
 var usersAPI = require('./routes/api/users');
 var productsAPI = require('./routes/api/products');
 var categoriesAPI = require('./routes/api/categories');
+
+// history back vuejs
+app.use(history({
+  index: '/',
+  logger: console.log.bind(console)
+}));
 
 app.use('/', index);
 app.use('/dashboard', dashboard);

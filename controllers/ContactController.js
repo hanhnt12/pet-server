@@ -10,10 +10,12 @@ exports.validate = function (req, res, next) {
   Common.checkBodyRequestLength(req, 'caption', 10, 500);
   Common.checkBodyRequestLength(req, 'name', 4, 50);
   Common.santizeItem(req, 'title');
-  // Common.santizeItem(req, 'caption');
+  Common.santizeItem(req, 'caption');
   Common.santizeItem(req, 'phone');
   Common.santizeItem(req, 'mobile');
   Common.santizeItem(req, 'email');
+  Common.santizeItem(req, 'categoryHome');
+  Common.santizeItem(req, 'categoryProduct');
 
   req.checkBody('email', 'Invalid email').isEmail();
 
@@ -29,6 +31,8 @@ exports.validate = function (req, res, next) {
     mobile: req.body.mobile,
     email: req.body.email,
     facebookLink: req.body.facebookLink,
+    categoryHome: req.body.categoryHome,
+    categoryProduct: req.body.categoryProduct,
     _id: req.body.contactId
   };
 

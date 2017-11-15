@@ -97,12 +97,6 @@ var usersAPI = require('./routes/api/users');
 var productsAPI = require('./routes/api/products');
 var categoriesAPI = require('./routes/api/categories');
 
-// history back vuejs
-app.use(history({
-  index: '/',
-  logger: console.log.bind(console)
-}));
-
 app.use('/', index);
 app.use('/dashboard', dashboard);
 app.use('/users', users);
@@ -113,6 +107,12 @@ app.use('/api', api);
 app.use('/api/user', usersAPI);
 app.use('/api/products', productsAPI);
 app.use('/api/categories', categoriesAPI);
+
+// history back vuejs
+app.use(history({
+  index: '/',
+  logger: console.log.bind(console)
+}));
 // =======================
 // end routes ============
 // =======================

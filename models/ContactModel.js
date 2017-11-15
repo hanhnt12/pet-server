@@ -8,7 +8,9 @@ let schema = new Schema({
     phone: { type: String, required: true },
     mobile: { type: String, required: true },
     email: { type: String, required: true, lowercase: true },
-    facebookLink: { type: String }
+    facebookLink: { type: String },
+    categoryHome: { type: String, max: 50 },
+    categoryProduct: { type: String, max: 50 }
 });
 
 module.exports = mongoose.model('contact', schema);

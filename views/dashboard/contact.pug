@@ -10,6 +10,7 @@ block content
     if dataError
       - contact = dataError
     form.form-horizontal(method="POST")
+      h3 Thông tin liên lạc
       div.form-group
         label.control-label.col-sm-2(for='title') Tiêu đề:
         div.col-sm-10
@@ -39,6 +40,15 @@ block content
         div.col-sm-10
           input.form-control#fbLink(value!=contact.facebookLink name="facebookLink")
       input(value!=contact._id name="contactId" type="hidden")
+      h3 Thay đổi tiêu đề
+      div.form-group
+        label.control-label.col-sm-2(for='categoryHome') Category (Trang chủ):
+        div.col-sm-10
+          input.form-control#categoryHome(value=contact.categoryHome name="categoryHome")
+      div.form-group
+        label.control-label.col-sm-2(for='categoryProduct') Category (Sản phẩm):
+        div.col-sm-10
+          input.form-control#categoryProduct(value=contact.categoryProduct name="categoryProduct")
       div.form-group
         div.col-sm-2
         div.col-sm-10

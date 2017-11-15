@@ -13,6 +13,7 @@ exports.getContactInformaion = async function (req, res, next) {
       res.json(contact[0]);
     } else {
       let contact = await ContactModel.find({});
+      Common.customLog(req, contact);
       res.render(Common.CONTACT_UPDATE_PATH_RENDER, {
         title: Common.CONTACT_UPDATE_TITLE,
         contact: contact[0]

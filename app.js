@@ -23,7 +23,6 @@ mongoose.connect(dbUrl, {
   useMongoClient: true
 });
 
-console.log('url connect db: ' + config.url)
 var db = mongoose.connection;
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -90,7 +89,6 @@ app.use(function (req, res, next) {
 // =======================
 var index = require('./routes/index');
 var users = require('./routes/users');
-var carts = require('./routes/carts');
 var api = require('./routes/api/api');
 var dashboard = require('./routes/dashboard');
 var usersAPI = require('./routes/api/users');
@@ -100,7 +98,6 @@ var categoriesAPI = require('./routes/api/categories');
 app.use('/', index);
 app.use('/dashboard', dashboard);
 app.use('/users', users);
-app.use('/cart', carts);
 
 // api
 app.use('/api', api);
@@ -113,6 +110,7 @@ app.use(history({
   index: '/',
   logger: console.log.bind(console)
 }));
+
 // =======================
 // end routes ============
 // =======================

@@ -1,7 +1,19 @@
+let DB = require('./db');
+
+const connectionString = 'mongodb://'
+  + DB.user
+  + ':'
+  + DB.password
+  + '@'
+  + DB.host
+  + ':'
+  + DB.port
+  + '/'
+  + DB.dbName;
+
 // config to all system
 module.exports = {
-  // mongodb://hanhnt12:123456a-@ds259175.mlab.com:59175/petstore
-  url: process.env.DB_URL || "mongodb://hanhnt12:123456a-@ds259175.mlab.com:59175/petstore",//'mongodb://localhost:27017/petshop', // URL connect to database
+  url: process.env.DB_URL || connectionString,//'mongodb://localhost:27017/petshop', // URL connect to database
   token: {
     secret: '$hanh12ntZZA<>"', // secret key to encode/decode token
     expiresIn: 60 * 60 * 3 * 1000, // expires in 3 hours 

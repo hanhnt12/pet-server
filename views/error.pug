@@ -1,20 +1,40 @@
 //- extends ./dashboard/layout
+doctype html
+html(lang='en')
+  head
+    
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible' content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='icon' href='../../favicon.ico')
 
-block content
-  h1= message
-  //- h2= error.status
-  //- pre #{error.stack}
-  div.row(style="background-image: url('/images/bg_err.png');")
-    div.col-md-12
-      div.error-template
-        h1 Oops!
-        h2= error.status + ' - ' +  message
-          div.error-details
-              | Sorry, an error has occured, Requested page not found!
-          div.error-actions
-            a(href="/").btn.btn-primary.btn-lg
-              span.glyphicon.glyphicon-home
-              | Trang chủ
-            a(href="/").btn.btn-primary.btn-lg
-              span.glyphicon.glyphicon-envelope
-              | Hỗ trợ
+    title= "Lâm Trang pet store -" + title
+
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/dashboard.css')
+
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+    script(src='/javascripts/dashboard.js')
+
+  body
+    div.container-fluid
+      
+      //- h2= error.status
+      //- pre #{error.stack}
+      div.row(style="background-image: url('/images/bg_err.png');")
+        // h1.text-center= message
+        div.col-md-12
+          div.error-template
+            h1 Rất tiếc!
+            // h2= error.status + ' - ' +  message
+            div.error-details
+                | Xin lỗi, đã xảy ra lỗi, Yêu cầu trang không tìm thấy!
+            div.error-actions
+              a(href="/").btn.btn-primary.btn-lg
+                span.glyphicon.glyphicon-home
+                | Trang chủ
+              a(href="/").btn.btn-primary.btn-lg
+                span.glyphicon.glyphicon-envelope
+                | Hỗ trợ

@@ -21,7 +21,7 @@ router.use('/', isLoggedIn, function (req, res, next) {
  * GET home page.
  * system dashboard
  */
-router.get('/', function (req, res, next) {
+router.get('/', isLoggedIn, function (req, res, next) {
   res.render(Common.DASHBOARD_PATH_RENDER, {
     title: Common.DASHBOARD_TITLE
   });
@@ -31,7 +31,7 @@ router.get('/', function (req, res, next) {
  * get list categories
  * path: /dashboard/categories
  */
-router.get('/categories', CategoryService.getCategories);
+router.get('/categories', isLoggedIn, CategoryService.getCategories);
 
 /**
  * get information to update category
@@ -39,6 +39,7 @@ router.get('/categories', CategoryService.getCategories);
  * validate category and get category details
  */
 router.get('/category/:categoryId/update',
+  isLoggedIn,
   CommonController.validateObjectId,
   CategoryService.updateCategoryGet
 );
@@ -49,6 +50,7 @@ router.get('/category/:categoryId/update',
  * validate and update category
  */
 router.post('/category/:categoryId/update',
+  isLoggedIn,
   CommonController.validateObjectId,
   CategoryController.validateUpdatePost,
   CategoryService.updateCategoryPost
@@ -59,6 +61,7 @@ router.post('/category/:categoryId/update',
  * path: /dashboard/products
  */
 router.get('/products',
+  isLoggedIn,
   ProductController.validateSearch,
   ProductService.searchProduct
 );
@@ -69,6 +72,7 @@ router.get('/products',
  * get list category before render to display selectbox
  */
 router.get('/product/add',
+  isLoggedIn,
   CategoryService.getCategoryName,
   function (req, res, next) {
     res.render(Common.PRODUCT_ADD_PATH_RENDER, {
@@ -84,6 +88,7 @@ router.get('/product/add',
  * get list category before render to display selectbox
  */
 router.post('/product/add',
+  isLoggedIn,
   CategoryService.getCategoryName,
   ProductController.validateAddPost,
   ProductService.addProduct
@@ -95,6 +100,7 @@ router.post('/product/add',
  * update product get
  */
 router.get('/product/:productId/update',
+  isLoggedIn,
   CommonController.validateObjectId,
   CategoryService.getCategoryName,
   ProductService.getProduct
@@ -106,6 +112,7 @@ router.get('/product/:productId/update',
 * update product post
 */
 router.post('/product/:productId/update',
+  isLoggedIn,
   CommonController.validateObjectId,
   CategoryService.getCategoryName,
   ProductController.validateAddPost,
@@ -116,6 +123,7 @@ router.post('/product/:productId/update',
  * DELETE PRODUCT
  */
 router.get('/product/:productId/delete',
+  isLoggedIn,
   CommonController.validateObjectId,
   ProductService.deleteProduct
 );
@@ -123,12 +131,13 @@ router.get('/product/:productId/delete',
 /**
  * GET CONTACT INFORMATION
  */
-router.get('/contact', ContactService.getContactInformaion);
+router.get('/contact', isLoggedIn, ContactService.getContactInformaion);
 
 /**
  * UPDATE CONTACT INFORMATION
  */
 router.post('/contact',
+  isLoggedIn,
   ContactController.validate,
   ContactService.updateContactInformaion
 );

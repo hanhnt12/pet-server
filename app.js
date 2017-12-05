@@ -91,9 +91,28 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api/api');
 var dashboard = require('./routes/dashboard');
-var usersAPI = require('./routes/api/users');
 var productsAPI = require('./routes/api/products');
 var categoriesAPI = require('./routes/api/categories');
+
+// history back vuejs
+app.use(history({
+  index: '/',
+  logger: console.log.bind(console),
+  rewrites: [
+    {
+      from: /^\/dashboard.*$/,
+      to: function(context) {
+        return context.parsedUrl.pathname;
+      }
+    },
+    {
+      from: /^\/users.*$/,
+      to: function(context) {
+        return context.parsedUrl.pathname;
+      }
+    }
+  ]
+}));
 
 app.use('/', index);
 app.use('/dashboard', dashboard);
@@ -101,22 +120,12 @@ app.use('/users', users);
 
 // api
 app.use('/api', api);
-app.use('/api/user', usersAPI);
 app.use('/api/products', productsAPI);
 app.use('/api/categories', categoriesAPI);
-
-// history back vuejs
-app.use(history({
-  index: '/',
-  logger: console.log.bind(console)
-}));
 
 // =======================
 // end routes ============
 // =======================
-
-// log error
-app.use(logErrors);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -170,11 +179,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// log error
-function logErrors(err, req, res, next) {
-  console.error(err.stack);
-  next(err);
-}
 
 module.exports = app;
